@@ -76,8 +76,20 @@ class CammeSlide(Slide):
     """ A slide with camme """
 
     def __init__(self, position, cam=None, cam_pos=None, cam_sup=None):
+        """ init of cammeSlide.
+            According to the type of machine, cammes slides are directly
+            created and place without cammes, exepted the cut slide, whish as
+            camme, camme angle and camme support by default.
+            to over, the informations about camme are optional, she can be
+            decide later.
+
+            position -- the position of the motor in the machine
+            cam -OPTINAL- camme used
+            cam_pos -OPTINAL- position of the camme
+            cam_sup -OPTINAL- support camme used """
 
         self.position = position
+        # if a camme is find out
         if cam:
             self.cam = cam
             if cam_pos:
