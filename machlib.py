@@ -89,13 +89,15 @@ class CammeSlide(Slide):
             cam_sup -OPTINAL- support camme used """
 
         self.position = position
-        # if a camme is find out
+        # if a camme is find out. <cam_pos> and <cam_sup> are not
+        # checked if not.
         if cam:
             self.cam = cam
             if cam_pos:
                 self.cam_pos = cam_pos
             if cam_sup:
                 self.cam_sup = cam_sup
+
 
     def add_cam(self, cam, cam_pos, cam_sup):
         """ Adding a camme. """
@@ -110,9 +112,46 @@ class CammeSlide(Slide):
 class MotorSlide(Slide):
     """ A slide with motor """
 
-    def __init__(self, position, motor=None):
+    def __init__(self, pos, motor=None):
+        """ init of MotorSlide.
+            According the type of the machine, motor slide are directly
+            created and places. see --TODO-- for view machines layouts.
+
+            pos -- motor position
+            motor -OPTINAL- motor name """
 
         self.position = position
+
+        if motor:
+            self.motor = motor
+
+
+    def move(self, motor, pos):
+        """ Moving motor position.
+            According the type of the machine, any motors cannot be move.
+
+        motor -- the motor would be move
+        pos -- new position in layout """
+        pass
+
+
+    def remove(self):
+        """ Removing motor on layout. """
+
+        # if the position is None, the motor is retired of the machine
+        # but no destroy.
+        self.position = None
+
+
+    def add(self, pos, motor):
+        """ Add motor on layout.
+            Like <init> but the motor name is mandatory.
+
+            position -- motor position
+            motor -- motor name """
+
+        self.position = pos
+        self.motor = motor
 
 
 class Camme(object):
