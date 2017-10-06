@@ -17,9 +17,9 @@ MX20 = {"name": "MX20", "capacity": 2.0}
 MCS20 = {"name": "MCS20", "capacity": 2.0}
 AX20 = {"name": "AX20", "capacity": 2.0}
 MS20 = {"name": "MS20", "capacity": 2.0}
-MCS15G = {"name": "MCS15G", "capacity" : 1.5)
+MCS15G = {"name": "MCS15G", "capacity": 1.5}
 SX15 = {"name": "SX15", "capacity": 1.5}
-MX10 = {"name": "MX10", "capacity": 1.0)
+MX10 = {"name": "MX10", "capacity": 1.0}
 
 # Listing of model available.
 # Stocked on a tuple, because she do not need to be modify.
@@ -69,10 +69,10 @@ def check_capacity(model, wire):
             False -- she can't
             """
 
-    return if model.get("capacity") >= wire
+    return model.get("capacity") >= wire
 
 
-class CammeSlide(Slide):
+class CammeSlide(object):
     """ A slide with camme """
 
     def __init__(self, position, cam=None, cam_pos=None, cam_sup=None):
@@ -98,9 +98,8 @@ class CammeSlide(Slide):
             if cam_sup:
                 self.cam_sup = cam_sup
 
-
-    def add_cam(self, cam, cam_pos, cam_sup):
-        """ Adding a camme. """
+    def place_cam(self, cam, cam_pos, cam_sup):
+        """ placeing a camme. """
 
         self.cam = cam
         self.cam_pos = cam_pos
@@ -109,22 +108,20 @@ class CammeSlide(Slide):
     def __str__(self):
         pass
 
-class MotorSlide(Slide):
+
+class MotorSlide(object):
     """ A slide with motor """
 
-    def __init__(self, pos, motor=None):
+    def __init__(self, pos, motor, auto_call=None):
         """ init of MotorSlide.
             According the type of the machine, motor slide are directly
             created and places. see --TODO-- for view machines layouts.
 
             pos -- motor position
-            motor -OPTINAL- motor name """
+            motor -- motor name """
 
         self.position = position
-
-        if motor:
-            self.motor = motor
-
+        self.motor = motor
 
     def move(self, motor, pos):
         """ Moving motor position.
@@ -134,7 +131,6 @@ class MotorSlide(Slide):
         pos -- new position in layout """
         pass
 
-
     def remove(self):
         """ Removing motor on layout. """
 
@@ -142,10 +138,9 @@ class MotorSlide(Slide):
         # but no destroy.
         self.position = None
 
-
-    def add(self, pos, motor):
-        """ Add motor on layout.
-            Like <init> but the motor name is mandatory.
+    def place(self, pos, motor):
+        """ Place motor on layout.
+            If the motor a ben remove.
 
             position -- motor position
             motor -- motor name """
@@ -166,7 +161,7 @@ class FixedMotor(Motor):
     pass
 
 
-class AdditionalMotor(Motor):
+class additionalMotor(Motor):
     pass
 
 
@@ -184,6 +179,7 @@ class Tool(object):
 
 class Spinner(Tool):
     pass
+
 
 # Error Class
 class MachineCapacityError():
