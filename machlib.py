@@ -99,7 +99,7 @@ class CammeSlide(object):
                 self.cam_sup = cam_sup
 
     def place_cam(self, cam, cam_pos, cam_sup):
-        """ placeing a camme. """
+        """ placing a camme. """
 
         self.cam = cam
         self.cam_pos = cam_pos
@@ -110,62 +110,70 @@ class CammeSlide(object):
 
 
 class MotorSlide(object):
-    """ A slide with motor """
+    """ A slide controlled by motor.
+        According the type of the machine, motor slide are directly
+        created and places. A motor can be fixed on layout or removable
+        """
 
-    def __init__(self, pos, motor, auto_call=None):
+    def __init__(self, position, motor, fixed=None):
         """ init of MotorSlide.
-            According the type of the machine, motor slide are directly
-            created and places. see --TODO-- for view machines layouts.
 
             pos -- motor position
-            motor -- motor name """
+            motor -- motor name
+            fixed -- if the motor is fixed on layout """
 
         self.position = position
         self.motor = motor
+        # if is fixed (any value) he can't move or be remove
+        self.fixed = fixed
+        # if the motor is on the machine actually
+        self.present = True
 
-    def move(self, motor, pos):
+    def move(self, new_position):
         """ Moving motor position.
             According the type of the machine, any motors cannot be move.
 
         motor -- the motor would be move
         pos -- new position in layout """
-        pass
+
+        if self.fixed:
+            raise IllegalMotorMoveError
+        if not self.present:
+            raise IllegalMotorMoveError
+        else:
+            self.position = new_position
+
 
     def remove(self):
         """ Removing motor on layout. """
 
-        # if the position is None, the motor is retired of the machine
-        # but no destroy.
-        self.position = None
+        if self.fixed:
+            raise IllegalMotorMoveError
+        elif not self.present:
+            raise IllegalMotorMoveError
+        else:
+            self.position = None
+            self.present = False
 
-    def place(self, pos, motor):
-        """ Place motor on layout.
+    def add(self, position):
+        """ add motor on layout.
             If the motor a ben remove.
 
-            position -- motor position
-            motor -- motor name """
+            position -- motor new position """
 
-        self.position = pos
-        self.motor = motor
+        if self.present:
+            raise IllegalMotorMoveError
+        elif self.fixed:
+            raise IllegalMotorMoveError
+        else:
+            self.position = position
+
+    def __str__(self):
+        return ('Motor : {}\n',
+                'Position : {}\n')
 
 
 class Camme(object):
-    pass
-
-
-class Motor(object):
-    pass
-
-
-class FixedMotor(Motor):
-    pass
-
-
-class additionalMotor(Motor):
-    pass
-
-
-class SpinnerMotor(Motor):
     pass
 
 
@@ -182,8 +190,11 @@ class Spinner(Tool):
 
 
 # Error Class
-class MachineCapacityError():
-    """ Error class call if the machine don't have the capacity to
-        produce the spring because the wire is too big. """
+class MachlibError(Exception):
+    pass
 
+class MachineCapacityError(MachlibError, OverflowError):
+    pass
+
+class IllegalMotorMoveError(MachlibError, AttributeError):
     pass
