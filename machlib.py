@@ -81,12 +81,14 @@ class Slide(object):
             position -- the position of the slide in the layout """
 
         self.position = position
-        # present -- boolean to now if the slide is actually monted
-        # on the machine.
+        # present -- if the slide is actually monted on the machine.
         self.present = True
-        # have_spin -- boolean to now if the slide have actually a
-        # spinner mounted.
+        # have_spin -- if the slide have actually a spinner mounted.
         self.have_spin = False
+        self.spinner = None
+        # have_sup -- if the slide have actually support mounted.
+        self.have_sup = False
+        self.support = None
 
     def move(self, new_position):
         """ Move the slide in the layout.
@@ -121,24 +123,50 @@ class Slide(object):
             self.present = True
 
     def mnt_spin(self, Spinner):
-        """ Mount spinner in the slide.
+        """ Mount spinner on slide.
 
             Spinner -- the spinner to add """
 
-        if self.have_spin:
+        if self.have_sup:
             raise IllegalSpinnerMoveError
         else:
-            self.have_spin = True
-            self.spinner = Spinner
+            if self.have_spin:
+                raise IllegalSpinnerMoveError
+            else:
+                self.have_spin = True
+                self.spinner = Spinner
 
     def umnt_spin(self):
-        """ Umount the current spinner in the slide. """
+        """ Umount the current spinner on slide. """
 
         if not self.have_spin:
             raise IllegalSpinnerMoveError
         else:
             self.spinner = None
             self.have_spin = False
+
+    def mnt_sup(self, Support):
+        """ Mount a support on slide.
+
+            support -- the support to mount """
+
+        if have_spin:
+            raise IllegalSupportMoveErro
+        else:
+            if self.have_sup:
+                raise IllegalSupportMoveErro
+            else:
+                self.support = Support
+                self.have_sup = True
+
+    def umnt_sup(self, Support):
+        """ Umount the current support on slide. """
+
+        if not self.have_sup:
+            raise IllegalSupportMoveErro
+        else:
+            self.support = None
+            self.have_sup = False
 
 
 class CammeSlide(Slide):
@@ -169,7 +197,7 @@ class CammeSlide(Slide):
 
     def __str__(self):
 
-        if self.cam:
+        if self.cam_pos:
             return ('Position : {}\nCamme : {} at {} Deg.'
                     .format(self.position, self.cam, self.cam_pos))
         else:
@@ -203,7 +231,6 @@ class MotorSlide(Slide):
 class Support(object):
     pass
 
-
 class Tool(object):
     pass
 
@@ -232,4 +259,7 @@ class IllegalSlideMoveError(MachlibError, AttributeError):
     pass
 
 class IllegalSpinnerMoveError(MachlibError, AttributeError):
+    pass
+
+class IllegalSupportMoveErro(MachlibError, AttributeError):
     pass
