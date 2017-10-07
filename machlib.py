@@ -72,8 +72,77 @@ def check_capacity(model, wire):
     return model.get("capacity") >= wire
 
 
-class CammeSlide(object):
-    """ A slide with camme """
+class Slide(object):
+    """ A slide in the machine layout. """
+
+    def __init__(self, position):
+        """ init of Slide.
+
+            position -- the position of the slide in the layout """
+
+        self.position = position
+        # present -- boolean to now if the slide is actually monted
+        # on the machine.
+        self.present = True
+        # have_spin -- boolean to now if the slide have actually a
+        # spinner mounted.
+        self.have_spin = False
+
+    def move(self, new_position):
+        """ Move the slide in the layout.
+
+            new_position -- he new position """
+
+        if not self.present:
+            raise IllegalSlideMoveError
+        else:
+            self.position = new_position
+
+    def remove(self):
+        """ Remove the slide in the layout.
+            the removing just set the position at None, the configuration are
+            keeeped. """
+
+        if not self.present:
+            raise IllegalSlideMoveError
+        else:
+            self.position = None
+            self.present = False
+
+    def add(self, position):
+        """ Add slide in the layout previously removed.
+
+            position -- the new position """
+
+        if self.present:
+            raise IllegalSlideMoveError
+        else:
+            self.position = position
+            self.present = True
+
+    def mnt_spin(self, Spinner):
+        """ Mount spinner in the slide.
+
+            Spinner -- the spinner to add """
+
+        if self.have_spin:
+            raise IllegalSpinnerMoveError
+        else:
+            self.have_spin = True
+            self.spinner = Spinner
+
+    def umnt_spin(self):
+        """ Umount the current spinner in the slide. """
+
+        if not self.have_spin:
+            raise IllegalSpinnerMoveError
+        else:
+            self.spinner = None
+            self.have_spin = False
+
+
+class CammeSlide(Slide):
+    """ A slide controlled with a camme """
 
     def __init__(self, position, cam=None, cam_pos=None, cam_sup=None):
         """ init of cammeSlide.
@@ -88,7 +157,7 @@ class CammeSlide(object):
             cam_pos -OPTINAL- position of the camme
             cam_sup -OPTINAL- support camme used """
 
-        self.position = position
+        Slide.__init__(position)
         # if a camme is find out. <cam_pos> and <cam_sup> are not
         # checked if not.
         if cam:
@@ -98,18 +167,15 @@ class CammeSlide(object):
             if cam_sup:
                 self.cam_sup = cam_sup
 
-    def place_cam(self, cam, cam_pos, cam_sup):
-        """ placing a camme. """
-
-        self.cam = cam
-        self.cam_pos = cam_pos
-        self.cam_sup = cam_sup
-
     def __str__(self):
-        pass
 
+        if self.cam:
+            return ('Position : {}\nCamme : {} at {} Deg.'
+                    .format(self.position, self.cam, self.cam_pos))
+        else:
+            return ('Position : {}'.format(self.position))
 
-class MotorSlide(object):
+class MotorSlide(Slide):
     """ A slide controlled by motor.
         According the type of the machine, motor slide are directly
         created and places. A motor can be fixed on layout or removable
@@ -118,63 +184,20 @@ class MotorSlide(object):
     def __init__(self, position, motor, fixed=None):
         """ init of MotorSlide.
 
-            pos -- motor position
+            pos -- motor position (from 0 to 359)
             motor -- motor name
             fixed -- if the motor is fixed on layout """
 
-        self.position = position
+        Slide.__init__(position)
         self.motor = motor
         # if is fixed (any value) he can't move or be remove
         self.fixed = fixed
-        # if the motor is on the machine actually
+        # if the slide is on the machine actually
         self.present = True
 
-    def move(self, new_position):
-        """ Moving motor position.
-            According the type of the machine, any motors cannot be move.
-
-        motor -- the motor would be move
-        pos -- new position in layout """
-
-        if self.fixed:
-            raise IllegalMotorMoveError
-        if not self.present:
-            raise IllegalMotorMoveError
-        else:
-            self.position = new_position
-
-
-    def remove(self):
-        """ Removing motor on layout. """
-
-        if self.fixed:
-            raise IllegalMotorMoveError
-        elif not self.present:
-            raise IllegalMotorMoveError
-        else:
-            self.position = None
-            self.present = False
-
-    def add(self, position):
-        """ add motor on layout.
-            If the motor a ben remove.
-
-            position -- motor new position """
-
-        if self.present:
-            raise IllegalMotorMoveError
-        elif self.fixed:
-            raise IllegalMotorMoveError
-        else:
-            self.position = position
-
     def __str__(self):
-        return ('Motor : {}\n',
-                'Position : {}\n')
-
-
-class Camme(object):
-    pass
+        return ('Motor : {}\nPosition : {}\n'
+                .format(self.motor, self.position))
 
 
 class Support(object):
@@ -193,8 +216,20 @@ class Spinner(Tool):
 class MachlibError(Exception):
     pass
 
+
 class MachineCapacityError(MachlibError, OverflowError):
+    """ The machine dosen't have the capacity to produce this
+        spring, the wire is too big. """
     pass
 
-class IllegalMotorMoveError(MachlibError, AttributeError):
+
+class IllegalSlideMoveError(MachlibError, AttributeError):
+    """ the slide cannot be move in her actual configuration. """
+    pass
+
+
+class IllegalSlideMoveError(MachlibError, AttributeError):
+    pass
+
+class IllegalSpinnerMoveError(MachlibError, AttributeError):
     pass
