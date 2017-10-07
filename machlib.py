@@ -23,7 +23,7 @@ MX10 = {"name": "MX10", "capacity": 1.0}
 
 # Listing of model available.
 # Stocked on a tuple, because she do not need to be modify.
-MODEL = (MX20, MCS20, AX20, MS20, MCS15G, SX15, MX10)
+MODEL_LIST = (MX20, MCS20, AX20, MS20, MCS15G, SX15, MX10)
 
 # Support
 STA = "STA"
@@ -37,7 +37,7 @@ STS = "STS"
 # table of support available.
 # Stocked on a tabe because the support are not available
 # for all machine.
-SUPPORT = [STA, STB, STU, SP, SPS, ST, STS]
+SUPPORT_LIST = [STA, STB, STU, SP, SPS, ST, STS]
 
 # Cammes
 CD1 = "CD1"
@@ -52,6 +52,12 @@ CH38 = "CH38"
 # Cammes tools
 SB = "SB"
 HRU = "HRU"
+CAMME_TOOLS_LIST = (SB, HRU)
+
+# Elements
+SPINNER = 'SPINNER'
+SUPPORT = 'SUPPORT'
+ELEMENTS_LIST = (SPINNER, SUPPORT)
 
 __all__ = ["check_capacity"]
 
@@ -83,12 +89,10 @@ class Slide(object):
         self.position = position
         # present -- if the slide is actually monted on the machine.
         self.present = True
-        # have_spin -- if the slide have actually a spinner mounted.
-        self.have_spin = False
-        self.spinner = None
-        # have_sup -- if the slide have actually support mounted.
-        self.have_sup = False
-        self.support = None
+        self.elt_mounted = False
+        # elt can have a --'SUPPORT' or 'SPINNER'--
+        # else he have None
+        self.elt = None
 
     def move(self, new_position):
         """ Move the slide in the layout.
@@ -122,51 +126,32 @@ class Slide(object):
             self.position = position
             self.present = True
 
-    def mnt_spin(self, Spinner):
-        """ Mount spinner on slide.
+    def add_elt(self, t, elt):
+        """ Add a element on Slide.
 
-            Spinner -- the spinner to add """
+            t -- the type of the element (Spinner/Support)
+            elt -- the element """
 
-        if self.have_sup:
-            raise IllegalSpinnerMoveError
+        if self.elt_mounted:
+            raise IllegalElementAddError
         else:
-            if self.have_spin:
-                raise IllegalSpinnerMoveError
-            else:
-                self.have_spin = True
-                self.spinner = Spinner
+            if t is SPINNER:
+                self.elt = SPINNER
+            else:  #t is SUPPORT:
+                self.elt = SUPPORT
 
-    def umnt_spin(self):
-        """ Umount the current spinner on slide. """
+            self.elt_mounted = True
 
-        if not self.have_spin:
-            raise IllegalSpinnerMoveError
+    def rm_elt(self, elt):
+        """ remove element on slide.
+
+            elt -- element to removed """
+
+        if not self.elt_mounted:
+            raise IllegalElementAddError
         else:
-            self.spinner = None
-            self.have_spin = False
-
-    def mnt_sup(self, Support):
-        """ Mount a support on slide.
-
-            support -- the support to mount """
-
-        if have_spin:
-            raise IllegalSupportMoveErro
-        else:
-            if self.have_sup:
-                raise IllegalSupportMoveErro
-            else:
-                self.support = Support
-                self.have_sup = True
-
-    def umnt_sup(self, Support):
-        """ Umount the current support on slide. """
-
-        if not self.have_sup:
-            raise IllegalSupportMoveErro
-        else:
-            self.support = None
-            self.have_sup = False
+            self.elt = None
+            self.elt_mounted = False
 
 
 class CammeSlide(Slide):
@@ -202,6 +187,7 @@ class CammeSlide(Slide):
                     .format(self.position, self.cam, self.cam_pos))
         else:
             return ('Position : {}'.format(self.position))
+
 
 class MotorSlide(Slide):
     """ A slide controlled by motor.
@@ -258,8 +244,5 @@ class IllegalSlideMoveError(MachlibError, AttributeError):
 class IllegalSlideMoveError(MachlibError, AttributeError):
     pass
 
-class IllegalSpinnerMoveError(MachlibError, AttributeError):
-    pass
-
-class IllegalSupportMoveErro(MachlibError, AttributeError):
+class IllegalElementAddError(MachlibError, AttributeError):
     pass
