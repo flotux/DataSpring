@@ -88,6 +88,8 @@ class Slide(object):
         # elt can have a --'SUPPORT' or 'SPINNER'--
         # else he have None
         self.elt = None
+        # It's possible to describe the utility of a slide.
+        self.descript = None
 
     def move(self, new_position):
         """ Move the slide in the layout.
@@ -128,6 +130,13 @@ class Slide(object):
 
         self.elt = None
         self.elt_mounted = False
+
+    def descript(self, mess):
+        """ Add a desciption of the slide utility in the actualy production.
+
+            mess -- A desciption of the slide utility """
+
+        self.descript = mess
 
     def __str__(self):
         pass
