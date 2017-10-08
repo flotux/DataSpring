@@ -11,11 +11,13 @@
 
 import machlib
 
+
 class Machine(object):
     """ Represent a machine """
 
     def __init__(self, model):
         """
-            model -- a dict correspond to a Machine
+            model -- a dict correspond to a Machine, see machlib/MODEL_LIST
             """
         self.model = model.get("name")
+        self.capacity = model.get("capacity")
