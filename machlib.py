@@ -31,11 +31,12 @@ SP = "SP"
 SPS = "SPS"
 ST = "ST"
 STS = "STS"
+SC = "SC"
 
 # table of support available.
 # Stocked on a tabe because the support are not available
 # for all machine.
-SUPPORT_LIST = [STA, STB, STU, SP, SPS, ST, STS]
+SUPPORT_LIST = [STA, STB, STU, SP, SPS, ST, STS, SC]
 
 # Cammes
 CD1 = "CD1"
@@ -56,9 +57,6 @@ CAMME_TOOLS_LIST = (SB, HRU)
 SPINNER_MOTOR = 'SPINNER_MOTOR'
 SUPPORT = 'SUPPORT'
 ELEMENTS_LIST = (SPINNER_MOTOR, SUPPORT)
-
-__all__ = ["check_capacity"]
-
 
 def check_capacity(model, wire):
     """ Check if the machine have the capacity too
@@ -117,26 +115,22 @@ class Slide(object):
             self.position = position
             self.present = True
 
-    def add_elt(self, t, elt):
+    def add_elt(self, Element):
         """ Add a element on Slide.
 
-            t -- the type of the element
-            elt -- the element """
+            Element -- the element (Spinner | Support) """
 
-        if t is SPINNER_MOTOR:
-            self.elt = SPINNER_MOTOR
-        else:
-            self.elt = SUPPORT
-
+        self.elt = Element
         self.elt_mounted = True
 
-    def rm_elt(self, elt):
-        """ remove element on slide.
-
-            elt -- element to removed """
+    def rm_elt(self):
+        """ remove element on slide. """
 
         self.elt = None
         self.elt_mounted = False
+
+    def __str__(self):
+        pass
 
 
 class CammeSlide(Slide):
@@ -228,9 +222,9 @@ class Element(object):
         he can be mounted on a slide, he can be a Support
         or a Spinner tool. """
 
-    def __init__(self):
+    def __init__(self, Tool=None):
 
-        self.tool = None
+        self.tool = Tool
         # if the support a tool
         self.have_tool = False
 
@@ -252,12 +246,12 @@ class Element(object):
 class SpinnerMotor(Element):
     """ A Spinner module provided that position a spinner tool. """
 
-    def __init__(self, scale=None):
+    def __init__(self, Tool=None, scale=None):
         """
             motor -- the motor of the spinner (P/Q/Y/X)
             scale -OPTIONAL- the value of the vertical scale """
 
-        Element.__init__()
+        Element.__init__(self, Tool)
         self.scale = scale
 
     def move_scale(self, new_position):
@@ -271,12 +265,12 @@ class SpinnerMotor(Element):
 class Support(Element):
     """ A support provided that position a tool. """
 
-    def __init__(self, model):
+    def __init__(self, name, Tool=None):
         """
-            model -- the model of the support (STx/SPx) """
+            name -- the name of the support"""
 
-        Element.__init__()
-        self.model = model
+        Element.__init__(self, Tool)
+        self.name = name
 
 
 class Rack(object):
@@ -294,14 +288,20 @@ class Rack(object):
 class Tool(object):
     """ A tool on the machine. """
 
-    def __init__(self):
-        pass
+    def __init__(self, name):
+        """
+            name -- the name of the tool """
+
+        self.name = name
 
 class Spinner(Tool):
     """ A spinner mounted in a spinner motor. """
 
-    def __init__(self):
-        pass
+    def __init__(self, name):
+        """
+            name -- the name of the spinner """
+
+        Tool.__init__(self, name)
 
 # Error Class
 class MachlibError(Exception):
