@@ -9,21 +9,19 @@
     A library for machine construction
     """
 
-
 # Machine model.
 #   name -- her name
 #   capacity -- her capacity
 MX20 = {"name": "MX20", "capacity": 2.0}
 MCS20 = {"name": "MCS20", "capacity": 2.0}
 AX20 = {"name": "AX20", "capacity": 2.0}
-MS20 = {"name": "MS20", "capacity": 2.0}
 MCS15G = {"name": "MCS15G", "capacity": 1.5}
 SX15 = {"name": "SX15", "capacity": 1.5}
 MX10 = {"name": "MX10", "capacity": 1.0}
 
 # Listing of model available.
 # Stocked on a tuple, because she do not need to be modify.
-MODEL_LIST = (MX20, MCS20, AX20, MS20, MCS15G, SX15, MX10)
+MODEL_LIST = (MX20, MCS20, AX20, MCS15G, SX15, MX10)
 
 # Support
 STA = "STA"
@@ -125,7 +123,7 @@ class Slide(object):
 
         if t is SPINNER_MOTOR:
             self.elt = SPINNER_MOTOR
-        else:  #t is SUPPORT:
+        else:
             self.elt = SUPPORT
 
         self.elt_mounted = True
@@ -293,14 +291,20 @@ class Tool(object):
     def __init__(self, name):
         """ init of tool.
 
-            name -- the name of the tool
-            func -OPTIONAL- description of the function of the tool """
+            name -- the name of the tool """
 
         self.name = name
 
 
 class Spinner(Tool):
-    pass
+    """ A spinner mounted in a spinner motor. """
+
+    def __init__(self, name):
+        """ init of Spinner.
+
+            name -- the name of the spinner """
+
+        Tool.__init__(name)
 
 
 # Error Class
