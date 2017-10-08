@@ -125,7 +125,7 @@ class Slide(object):
 
         if t is SPINNER_MOTOR:
             self.elt = SPINNER_MOTOR
-        else:  #t is SUPPORT:
+        else:
             self.elt = SUPPORT
 
         self.elt_mounted = True
@@ -293,14 +293,20 @@ class Tool(object):
     def __init__(self, name):
         """ init of tool.
 
-            name -- the name of the tool
-            func -OPTIONAL- description of the function of the tool """
+            name -- the name of the tool """
 
         self.name = name
 
 
 class Spinner(Tool):
-    pass
+    """ A spinner mounted in a spinner motor. """
+
+    def __init__(self, name):
+        """ init of Spinner.
+
+            name -- the name of the spinner """
+
+        Tool.__init__(name)
 
 
 # Error Class
