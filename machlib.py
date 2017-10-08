@@ -79,9 +79,8 @@ def check_capacity(model, wire):
 class Slide(object):
     """ A slide in the machine layout. """
 
-    def __init__(self, position):
-        """ init of Slide.
-
+    def __init__(self, position, fixed=False):
+        """
             position -- the position of the slide in the layout """
 
         self.position = position
@@ -97,23 +96,26 @@ class Slide(object):
 
             new_position -- he new position """
 
-        self.position = new_position
+        if not self.fixed:
+            self.position = new_position
 
     def remove(self):
         """ Remove the slide in the layout.
             the removing just set the position at None, the configuration are
             keeeped. """
 
-        self.position = None
-        self.present = False
+        if not self.fixed:
+            self.position = None
+            self.present = False
 
     def add(self, position):
         """ Add slide in the layout previously removed.
 
             position -- the new position """
 
-        self.position = position
-        self.present = True
+        if not self.pesent:
+            self.position = position
+            self.present = True
 
     def add_elt(self, t, elt):
         """ Add a element on Slide.
@@ -141,7 +143,7 @@ class CammeSlide(Slide):
     """ A slide controlled with a camme """
 
     def __init__(self, position, cam=None, cam_pos=None, cam_sup=None):
-        """ init of cammeSlide.
+        """
             According to the type of machine, cammes slides are directly
             created and place without cammes, exepted the cut slide, whish as
             camme, camme angle and camme support by default.
@@ -153,7 +155,7 @@ class CammeSlide(Slide):
             cam_pos -OPTINAL- position of the camme
             cam_sup -OPTINAL- support camme used """
 
-        Slide.__init__(position)
+        Slide.__init__(self, position)
         # if a camme is find out. <cam_pos> and <cam_sup> are not
         # checked if not.
         if cam:
@@ -205,23 +207,20 @@ class MotorSlide(Slide):
         created and places. A motor can be fixed on layout or removable
         """
 
-    def __init__(self, position, motor, fixed=None):
-        """ init of MotorSlide.
-
+    def __init__(self, position, fixed=False):
+        """
             pos -- motor position (from 0 to 359)
             motor -- motor name
             fixed -- if the motor is fixed on layout """
 
-        Slide.__init__(position)
-        self.motor = motor
-        # if is fixed (any value) he can't move or be remove
+        Slide.__init__(self, position)
+        # if he is fixed
         self.fixed = fixed
         # if the slide is on the machine actually
         self.present = True
 
     def __str__(self):
-        return ('Motor : {}\nPosition : {}\n'
-                .format(self.motor, self.position))
+        pass
 
 
 class Element(object):
@@ -229,12 +228,8 @@ class Element(object):
         he can be mounted on a slide, he can be a Support
         or a Spinner tool. """
 
-    def __init__(self, ref):
-        """ init of Support.
+    def __init__(self):
 
-            ref -- the reference of the element """
-
-        self.ref = ref
         self.tool = None
         # if the support a tool
         self.have_tool = False
@@ -257,13 +252,12 @@ class Element(object):
 class SpinnerMotor(Element):
     """ A Spinner module provided that position a spinner tool. """
 
-    def __init__(self, motor, scale=None):
-        """ init of SpinnerMotor.
-
+    def __init__(self, scale=None):
+        """
             motor -- the motor of the spinner (P/Q/Y/X)
             scale -OPTIONAL- the value of the vertical scale """
 
-        Element.__init__(motor)
+        Element.__init__()
         self.scale = scale
 
     def move_scale(self, new_position):
@@ -278,34 +272,36 @@ class Support(Element):
     """ A support provided that position a tool. """
 
     def __init__(self, model):
-        """ init of Support.
-
+        """
             model -- the model of the support (STx/SPx) """
 
-        Element.__init__(model)
+        Element.__init__()
+        self.model = model
+
+
+class Rack(object):
+    """ A rack, used on MX10,
+        he must be place on a MotorSlide"""
+
+    def __init__(self, place, fixed=False):
+        """
+            place -- the placement of the rack (CammeSlide|MotorSlide) """
+
+        self.place = place
+        self.fixed = fixed
 
 
 class Tool(object):
     """ A tool on the machine. """
 
-    def __init__(self, name):
-        """ init of tool.
-
-            name -- the name of the tool """
-
-        self.name = name
-
+    def __init__(self):
+        pass
 
 class Spinner(Tool):
     """ A spinner mounted in a spinner motor. """
 
-    def __init__(self, name):
-        """ init of Spinner.
-
-            name -- the name of the spinner """
-
-        Tool.__init__(name)
-
+    def __init__(self):
+        pass
 
 # Error Class
 class MachlibError(Exception):
