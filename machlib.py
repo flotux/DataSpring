@@ -175,6 +175,7 @@ class CammeSlide(Slide):
         else:
             return ('Position : {}'.format(self.position))
 
+
 class MotorSlide(Slide):
     """ A slide controlled by motor.
         According the type of the machine, motor slide are directly
@@ -230,6 +231,7 @@ class IllegalSlideMoveError(MachlibError, AttributeError):
 
 class IllegalSlideMoveError(MachlibError, AttributeError):
     pass
+
 
 class IllegalSpinnerMoveError(MachlibError, AttributeError):
     pass
