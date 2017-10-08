@@ -14,6 +14,8 @@ import math
 
 PI = math.pi
 SOLID_ANGLE = 360
+LEFT = 'left'
+RIGHT = 'right'
 
 __all__ = ["sensor_tol", "one_degree", "body_length", "body_weight",
            "angle_move", "arc_feed"]
