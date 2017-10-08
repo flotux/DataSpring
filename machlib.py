@@ -55,9 +55,9 @@ HRU = "HRU"
 CAMME_TOOLS_LIST = (SB, HRU)
 
 # Elements
-SPINNER = 'SPINNER'
+SPINNER_MOTOR = 'SPINNER_MOTOR'
 SUPPORT = 'SUPPORT'
-ELEMENTS_LIST = (SPINNER, SUPPORT)
+ELEMENTS_LIST = (SPINNER_MOTOR, SUPPORT)
 
 __all__ = ["check_capacity"]
 
@@ -129,14 +129,14 @@ class Slide(object):
     def add_elt(self, t, elt):
         """ Add a element on Slide.
 
-            t -- the type of the element (Spinner/Support)
+            t -- the type of the element
             elt -- the element """
 
         if self.elt_mounted:
             raise IllegalElementAddError
         else:
-            if t is SPINNER:
-                self.elt = SPINNER
+            if t is SPINNER_MOTOR:
+                self.elt = SPINNER_MOTOR
             else:  #t is SUPPORT:
                 self.elt = SUPPORT
 
@@ -148,7 +148,7 @@ class Slide(object):
             elt -- element to removed """
 
         if not self.elt_mounted:
-            raise IllegalElementAddError
+            raise IllegalElementRemoveError
         else:
             self.elt = None
             self.elt_mounted = False
@@ -214,11 +214,83 @@ class MotorSlide(Slide):
                 .format(self.motor, self.position))
 
 
-class Support(object):
-    pass
+class Element(object):
+    """ A Element is provided that position a Tool.
+        he can be mounted on a slide, he can be a Support
+        or a Spinner tool. """
+
+    def __init__(self, ref):
+        """ init of Support.
+
+            ref -- the reference of the element """
+
+        self.ref = ref
+        self.tool = None
+        # if the support a tool
+        self.have_tool = False
+
+    def add_tool(self, Tool):
+        """ mount a tool on support.
+
+            tool -- the tool to mount """
+
+        if self.have_tool:
+            raise IllegalElementAddError
+        else:
+            self.tool = Tool
+            self.have_tool = True
+
+    def rm_tool(self):
+        """ remove tool from support. """
+
+        if not self.have_tool:
+            raise IllegalElementRemoveError
+        else:
+            self.tool = None
+            self.have_tool = False
+
+
+class SpinnerMotor(Element):
+    """ A Spinner module provided that position a spinner tool. """
+
+    def __init__(self, motor, scale=None):
+        """ init of SpinnerMotor.
+
+            motor -- the motor of the spinner (P/Q/Y/X)
+            scale -OPTIONAL- the value of the vertical scale """
+
+        Element.__init__(motor)
+        self.scale = scale
+
+    def move_scale(self, new_position):
+        """ for move the scale.
+
+            new_position -- the new position of the scale """
+
+        self.scale = new_position
+
+
+class Support(Element):
+    """ A support provided that position a tool. """
+
+    def __init__(self, model):
+        """ init of Support.
+
+            model -- the model of the support (STx/SPx) """
+
+        Element.__init__(model)
+
 
 class Tool(object):
-    pass
+    """ A tool on the machine. """
+
+    def __init__(self, name):
+        """ init of tool.
+
+            name -- the name of the tool
+            func -OPTIONAL- description of the function of the tool """
+
+        self.name = name
 
 
 class Spinner(Tool):
@@ -241,8 +313,11 @@ class IllegalSlideMoveError(MachlibError, AttributeError):
     pass
 
 
-class IllegalSlideMoveError(MachlibError, AttributeError):
+class IllegalElementAddError(MachlibError, AttributeError):
+    """ The element cannot be add. """
     pass
 
-class IllegalElementAddError(MachlibError, AttributeError):
+
+class IllegalElementRemoveError(MachlibError, AttributeError):
+    """ The element cannot be remove. """
     pass
