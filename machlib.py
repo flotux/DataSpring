@@ -9,21 +9,19 @@
     A library for machine construction
     """
 
-
 # Machine model.
 #   name -- her name
 #   capacity -- her capacity
 MX20 = {"name": "MX20", "capacity": 2.0}
 MCS20 = {"name": "MCS20", "capacity": 2.0}
 AX20 = {"name": "AX20", "capacity": 2.0}
-MS20 = {"name": "MS20", "capacity": 2.0}
 MCS15G = {"name": "MCS15G", "capacity": 1.5}
 SX15 = {"name": "SX15", "capacity": 1.5}
 MX10 = {"name": "MX10", "capacity": 1.0}
 
 # Listing of model available.
 # Stocked on a tuple, because she do not need to be modify.
-MODEL = (MX20, MCS20, AX20, MS20, MCS15G, SX15, MX10)
+MODEL_LIST = (MX20, MCS20, AX20, MCS15G, SX15, MX10)
 
 # Support
 STA = "STA"
@@ -37,7 +35,7 @@ STS = "STS"
 # table of support available.
 # Stocked on a tabe because the support are not available
 # for all machine.
-SUPPORT = [STA, STB, STU, SP, SPS, ST, STS]
+SUPPORT_LIST = [STA, STB, STU, SP, SPS, ST, STS]
 
 # Cammes
 CD1 = "CD1"
@@ -52,6 +50,12 @@ CH38 = "CH38"
 # Cammes tools
 SB = "SB"
 HRU = "HRU"
+CAMME_TOOLS_LIST = (SB, HRU)
+
+# Elements
+SPINNER_MOTOR = 'SPINNER_MOTOR'
+SUPPORT = 'SUPPORT'
+ELEMENTS_LIST = (SPINNER_MOTOR, SUPPORT)
 
 __all__ = ["check_capacity"]
 
@@ -81,64 +85,56 @@ class Slide(object):
             position -- the position of the slide in the layout """
 
         self.position = position
-        # present -- boolean to now if the slide is actually monted
-        # on the machine.
+        # present -- if the slide is actually monted on the machine.
         self.present = True
-        # have_spin -- boolean to now if the slide have actually a
-        # spinner mounted.
-        self.have_spin = False
+        self.elt_mounted = False
+        # elt can have a --'SUPPORT' or 'SPINNER'--
+        # else he have None
+        self.elt = None
 
     def move(self, new_position):
         """ Move the slide in the layout.
 
             new_position -- he new position """
 
-        if not self.present:
-            raise IllegalSlideMoveError
-        else:
-            self.position = new_position
+        self.position = new_position
 
     def remove(self):
         """ Remove the slide in the layout.
             the removing just set the position at None, the configuration are
             keeeped. """
 
-        if not self.present:
-            raise IllegalSlideMoveError
-        else:
-            self.position = None
-            self.present = False
+        self.position = None
+        self.present = False
 
     def add(self, position):
         """ Add slide in the layout previously removed.
 
             position -- the new position """
 
-        if self.present:
-            raise IllegalSlideMoveError
+        self.position = position
+        self.present = True
+
+    def add_elt(self, t, elt):
+        """ Add a element on Slide.
+
+            t -- the type of the element
+            elt -- the element """
+
+        if t is SPINNER_MOTOR:
+            self.elt = SPINNER_MOTOR
         else:
-            self.position = position
-            self.present = True
+            self.elt = SUPPORT
 
-    def mnt_spin(self, Spinner):
-        """ Mount spinner in the slide.
+        self.elt_mounted = True
 
-            Spinner -- the spinner to add """
+    def rm_elt(self, elt):
+        """ remove element on slide.
 
-        if self.have_spin:
-            raise IllegalSpinnerMoveError
-        else:
-            self.have_spin = True
-            self.spinner = Spinner
+            elt -- element to removed """
 
-    def umnt_spin(self):
-        """ Umount the current spinner in the slide. """
-
-        if not self.have_spin:
-            raise IllegalSpinnerMoveError
-        else:
-            self.spinner = None
-            self.have_spin = False
+        self.elt = None
+        self.elt_mounted = False
 
 
 class CammeSlide(Slide):
@@ -162,14 +158,41 @@ class CammeSlide(Slide):
         # checked if not.
         if cam:
             self.cam = cam
-            if cam_pos:
-                self.cam_pos = cam_pos
-            if cam_sup:
-                self.cam_sup = cam_sup
+            if not cam_pos:
+                raise IllegalCammeSetError
+            self.cam_pos = cam_pos
+            if not cam_sup:
+                raise IllegalCammeSetError
+            self.cam_sup = cam_sup
+            self.have_cam = True
+        else:
+            self.cam, self.cam_pos, self.cam_sup = None, None, None
+            self.have_cam = False
+
+    def add_cam(self, cam, cam_pos, cam_sup):
+        """ Add a camme on slide.
+
+            cam -- camme used
+            cam_pos -- position of the camme
+            cam_sup -- support camme used """
+
+        self.cam, self.cam_pos, self.cam_sup = cam, cam_pos, cam_sup
+
+    def rm_cam(self):
+        """ Remove cam from slide. """
+
+        self.cam, self.cam_pos, self.cam_sup = None, None, None
+
+    def move_cam(self, new_position):
+        """ move cam position.
+
+            new_position -- the new position of the cam """
+
+        self.cam_pos = new_position
 
     def __str__(self):
 
-        if self.cam:
+        if self.cam_pos:
             return ('Position : {}\nCamme : {} at {} Deg.'
                     .format(self.position, self.cam, self.cam_pos))
         else:
@@ -201,16 +224,87 @@ class MotorSlide(Slide):
                 .format(self.motor, self.position))
 
 
-class Support(object):
-    pass
+class Element(object):
+    """ A Element is provided that position a Tool.
+        he can be mounted on a slide, he can be a Support
+        or a Spinner tool. """
+
+    def __init__(self, ref):
+        """ init of Support.
+
+            ref -- the reference of the element """
+
+        self.ref = ref
+        self.tool = None
+        # if the support a tool
+        self.have_tool = False
+
+    def add_tool(self, Tool):
+        """ mount a tool on support.
+
+            tool -- the tool to mount """
+
+        self.tool = Tool
+        self.have_tool = True
+
+    def rm_tool(self):
+        """ remove tool from support. """
+
+        self.tool = None
+        self.have_tool = False
+
+
+class SpinnerMotor(Element):
+    """ A Spinner module provided that position a spinner tool. """
+
+    def __init__(self, motor, scale=None):
+        """ init of SpinnerMotor.
+
+            motor -- the motor of the spinner (P/Q/Y/X)
+            scale -OPTIONAL- the value of the vertical scale """
+
+        Element.__init__(motor)
+        self.scale = scale
+
+    def move_scale(self, new_position):
+        """ for move the scale.
+
+            new_position -- the new position of the scale """
+
+        self.scale = new_position
+
+
+class Support(Element):
+    """ A support provided that position a tool. """
+
+    def __init__(self, model):
+        """ init of Support.
+
+            model -- the model of the support (STx/SPx) """
+
+        Element.__init__(model)
 
 
 class Tool(object):
-    pass
+    """ A tool on the machine. """
+
+    def __init__(self, name):
+        """ init of tool.
+
+            name -- the name of the tool """
+
+        self.name = name
 
 
 class Spinner(Tool):
-    pass
+    """ A spinner mounted in a spinner motor. """
+
+    def __init__(self, name):
+        """ init of Spinner.
+
+            name -- the name of the spinner """
+
+        Tool.__init__(name)
 
 
 # Error Class
@@ -229,9 +323,19 @@ class IllegalSlideMoveError(MachlibError, AttributeError):
     pass
 
 
-class IllegalSlideMoveError(MachlibError, AttributeError):
+class IllegalElementAddError(MachlibError, AttributeError):
+    """ The element cannot be add. """
     pass
 
 
+class IllegalElementRemoveError(MachlibError, AttributeError):
+    """ The element cannot be remove. """
+    pass
+
+
+<<<<<<< HEAD
 class IllegalSpinnerMoveError(MachlibError, AttributeError):
+=======
+class IllegalCammeSetError(MachlibError, AttributeError):
+>>>>>>> d05d41741402783e42dd80a4501c8827e9b8c445
     pass

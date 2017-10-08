@@ -13,10 +13,9 @@ import sprlib
 
 class Spring(object):
 
-    def __init__(self, ref, ind, wire, diam, diam_tol, nb,
+    def __init__(self, ind, wire, diam, diam_tol, nb,
                  machine, angle=0, angle_tol=0):
         """
-            ref -- reference of the spring
             ind -- indice of the spring
             wire -- wire diameter
             diam -- body diameter
@@ -26,7 +25,6 @@ class Spring(object):
             angle -OPTIONAL- angle of spring
             angle_tol -OPTIONAL- angle toleration """
 
-        self.ref = ref
         self.ind = ind
         self.wire = wire
         self.diam = diam
