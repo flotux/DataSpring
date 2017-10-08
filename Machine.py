@@ -9,8 +9,7 @@
     TODO
     """
 
-import machlib
-from machlib import MotorSlide, CammeSlide, SpinnerMotor, Rack
+from machlib import *
 from sprlib import LEFT, RIGHT
 
 class Machine(object):
@@ -20,10 +19,10 @@ class Machine(object):
         """
             sens -- the winding direction of the spring to produce
             """
-        self.model = str()
-        self.capacity = float()
-        self.clamp = bool()
-        self.cam = (bool)
+            
+        self.capacity = None
+        self.clamp = False
+        self.camera = None
         self.sens = sens
         # the layout of the machine, all of the place are initialized as None,
         # execpt the cut slide.
@@ -31,7 +30,7 @@ class Machine(object):
         #self.layout = {'0': None, '45': None, '90':None, '135': None,
         #               '180': None, '225': None, '270': None, '315': None}
         # the entry of the machine.
-        self.entry = {'A1': None, 'A2', None, 'A3':None, 'A4': None,
+        self.entry = {'A1': None, 'A2': None, 'A3':None, 'A4': None,
                       'A5': None, 'A6': None, 'A7': None, 'A8': None}
         # the sensors on machine.
         self.sensors = {'M0': None, 'M1': None}
@@ -55,6 +54,11 @@ class Mx(Machine):
         # Spinner motors
         self.P = SpinnerMotor()
         self.Q = SpinnerMotor()
+
+        if self.sens is LEFT:
+            self.Z.add_elt(Support(SC, 'TC28'))
+        else:
+            self.T.add_elt(Support(SC, 'TC28'))
 
 
 class Mx20(Mx):
