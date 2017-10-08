@@ -99,32 +99,23 @@ class Slide(object):
 
             new_position -- he new position """
 
-        if not self.present:
-            raise IllegalSlideMoveError
-        else:
-            self.position = new_position
+        self.position = new_position
 
     def remove(self):
         """ Remove the slide in the layout.
             the removing just set the position at None, the configuration are
             keeeped. """
 
-        if not self.present:
-            raise IllegalSlideMoveError
-        else:
-            self.position = None
-            self.present = False
+        self.position = None
+        self.present = False
 
     def add(self, position):
         """ Add slide in the layout previously removed.
 
             position -- the new position """
 
-        if self.present:
-            raise IllegalSlideMoveError
-        else:
-            self.position = position
-            self.present = True
+        self.position = position
+        self.present = True
 
     def add_elt(self, t, elt):
         """ Add a element on Slide.
@@ -132,26 +123,20 @@ class Slide(object):
             t -- the type of the element
             elt -- the element """
 
-        if self.elt_mounted:
-            raise IllegalElementAddError
-        else:
-            if t is SPINNER_MOTOR:
-                self.elt = SPINNER_MOTOR
-            else:  #t is SUPPORT:
-                self.elt = SUPPORT
+        if t is SPINNER_MOTOR:
+            self.elt = SPINNER_MOTOR
+        else:  #t is SUPPORT:
+            self.elt = SUPPORT
 
-            self.elt_mounted = True
+        self.elt_mounted = True
 
     def rm_elt(self, elt):
         """ remove element on slide.
 
             elt -- element to removed """
 
-        if not self.elt_mounted:
-            raise IllegalElementRemoveError
-        else:
-            self.elt = None
-            self.elt_mounted = False
+        self.elt = None
+        self.elt_mounted = False
 
 
 class CammeSlide(Slide):
@@ -175,10 +160,37 @@ class CammeSlide(Slide):
         # checked if not.
         if cam:
             self.cam = cam
-            if cam_pos:
-                self.cam_pos = cam_pos
-            if cam_sup:
-                self.cam_sup = cam_sup
+            if not cam_pos:
+                raise IllegalCammeSetError
+            self.cam_pos = cam_pos
+            if not cam_sup:
+                raise IllegalCammeSetError
+            self.cam_sup = cam_sup
+            self.have_cam = True
+        else:
+            self.cam, self.cam_pos, self.cam_sup = None, None, None
+            self.have_cam = False
+
+    def add_cam(self, cam, cam_pos, cam_sup):
+        """ Add a camme on slide.
+
+            cam -- camme used
+            cam_pos -- position of the camme
+            cam_sup -- support camme used """
+
+        self.cam, self.cam_pos, self.cam_sup = cam, cam_pos, cam_sup
+
+    def rm_cam(self):
+        """ Remove cam from slide. """
+
+        self.cam, self.cam_pos, self.cam_sup = None, None, None
+
+    def move_cam(self, new_position):
+        """ move cam position.
+
+            new_position -- the new position of the cam """
+
+        self.cam_pos = new_position
 
     def __str__(self):
 
@@ -234,20 +246,14 @@ class Element(object):
 
             tool -- the tool to mount """
 
-        if self.have_tool:
-            raise IllegalElementAddError
-        else:
-            self.tool = Tool
-            self.have_tool = True
+        self.tool = Tool
+        self.have_tool = True
 
     def rm_tool(self):
         """ remove tool from support. """
 
-        if not self.have_tool:
-            raise IllegalElementRemoveError
-        else:
-            self.tool = None
-            self.have_tool = False
+        self.tool = None
+        self.have_tool = False
 
 
 class SpinnerMotor(Element):
@@ -320,4 +326,8 @@ class IllegalElementAddError(MachlibError, AttributeError):
 
 class IllegalElementRemoveError(MachlibError, AttributeError):
     """ The element cannot be remove. """
+    pass
+
+
+class IllegalCammeSetError(MachlibError, AttributeError):
     pass
