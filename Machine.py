@@ -15,34 +15,42 @@ from sprlib import LEFT, RIGHT
 class Machine(object):
     """ Represent a machine """
 
-    def __init__(self, sens=RIGHT):
+    def __init__(self, wire, sens=RIGHT):
         """
+            wire -- the wire diameter of the spring to produce
             sens -- the winding direction of the spring to produce
             """
-            
+
         self.capacity = None
-        self.clamp = False
-        self.camera = None
-        self.sens = sens
+        # information from spring
+        self.sens, self.wire = sens, wire
+        # the rolling tool
+        self.roll_tool = str()
         # the layout of the machine, all of the place are initialized as None,
         # execpt the cut slide.
         # when a slide is renseigned, he is add to the layout dictionnary.
         #self.layout = {'0': None, '45': None, '90':None, '135': None,
         #               '180': None, '225': None, '270': None, '315': None}
-        # the entry of the machine.
+        # the entry of the machine, do receive a str() a values.
         self.entry = {'A1': None, 'A2': None, 'A3':None, 'A4': None,
                       'A5': None, 'A6': None, 'A7': None, 'A8': None}
-        # the sensors on machine.
+        # the poka-yoke modules
         self.sensors = {'M0': None, 'M1': None}
+        self.camera = None
+        # if a clamp is used
+        self.clamp = False
 
 
-class Mx(Machine):
-    """ A MX-- machine. """
 
-    def __init__(self, sens=RIGHT):
+class MxType(Machine):
+    """ A MX machine """
 
-        Machine.__init__(self, sens)
-        # Initialisation of the MX layout
+    def __init__(self, wire, sens=RIGHT):
+
+        Machine.__init__(self, wire, sens)
+        # the only rolling tools names is 'TB1 [wire diam]' in MX machines.
+        self.roll_tool = 'TB1 ' + str(wire)
+        ## Initialisation of the MX layout ##
         self.S = MotorSlide(0, True)
         self.T = MotorSlide(45, True)
         self.U = MotorSlide(90, True)
@@ -51,30 +59,37 @@ class Mx(Machine):
         self.X = MotorSlide(225, True)
         self.Y = MotorSlide(270, True)
         self.Z = MotorSlide(315, True)
-        # Spinner motors
+        ## Availables pinner motors ##
         self.P = SpinnerMotor()
         self.Q = SpinnerMotor()
-
+        ## Availables Supports ##
+        self.Supports = (SP, STA, STU)
+        ## Standard placement ##
+        # The S motor is restricted to <ST> support.
+        self.S.add_elt(Support(ST, self.roll_tool))
+        # Avoid the winding direction, the cut slide and a Spinner motor
+        # are directly placed in standard position.
         if self.sens is LEFT:
             self.Z.add_elt(Support(SC, 'TC28'))
+            self.U.add_elt(self.P)
         else:
             self.T.add_elt(Support(SC, 'TC28'))
+            self.Y.add_elt(self.P)
 
-
-class Mx20(Mx):
+class Mx20(MxType):
     """ A MX20 machine """
 
-    def __init__(self, sens=RIGHT):
+    def __init__(self, wire, sens=RIGHT):
 
-        Mx.__init__(self, sens)
+        Mx.__init__(self, wire, sens)
         self.capacity = 2.0
 
 
-class Mx10(Mx):
+class Mx10(MxType):
     """ A MX10 machine """
 
     def __init__(self, sens=RIGHT):
 
         Mx.__init__(self, sens)
         self.capacity = 1.0
-        self.rack0 = Rack(self.S, True)
+        self.rackS = Rack(self.S, True)
