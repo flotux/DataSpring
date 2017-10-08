@@ -333,9 +333,5 @@ class IllegalElementRemoveError(MachlibError, AttributeError):
     pass
 
 
-<<<<<<< HEAD
-class IllegalSpinnerMoveError(MachlibError, AttributeError):
-=======
 class IllegalCammeSetError(MachlibError, AttributeError):
->>>>>>> d05d41741402783e42dd80a4501c8827e9b8c445
     pass
