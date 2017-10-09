@@ -9,8 +9,12 @@
 
     Contain the pop up pages.
 
-        -- LoadPage -- The page to find and load programmes.
-        -- NewPage -- The page to create a new programme.
+        -- LoadPage -- Find and load programmes.
+        -- NewPage -- Create a new programme.
+        -- EntryConf -- Configure Entry.
+        -- SensorConf -- Configure Sensors.
+        -- CalcSpr -- Calculate values for springs.
+        -- CalcSpin -- Calculate values for spinners.
         """
 
 from tkinter import *
@@ -43,9 +47,4 @@ class CalcSpr(Tk):
 
 class CalcSpin(Tk):
     """ Calculate values for spinners. """
-    pass
-
-
-class CalcArc(Tk):
-    """ Calculate values for arc feed. """
     pass
