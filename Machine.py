@@ -41,7 +41,6 @@ class Machine(object):
         self.clamp = False
 
 
-
 class MxType(Machine):
     """ A MX machine """
 
@@ -60,8 +59,7 @@ class MxType(Machine):
         self.Y = MotorSlide(270, True)
         self.Z = MotorSlide(315, True)
         ## Availables pinner motors ##
-        self.P = SpinnerMotor()
-        self.Q = SpinnerMotor()
+        self.P, self.Q = SpinnerMotor(), SpinnerMotor()
         ## Availables Supports ##
         self.Supports = (SP, STA, STU)
         ## Standard placement ##
@@ -76,6 +74,7 @@ class MxType(Machine):
             self.T.add_elt(Support(SC, 'TC28'))
             self.Y.add_elt(self.P)
 
+
 class Mx20(MxType):
     """ A MX20 machine """
 
@@ -88,8 +87,8 @@ class Mx20(MxType):
 class Mx10(MxType):
     """ A MX10 machine """
 
-    def __init__(self, sens=RIGHT):
+    def __init__(self, wire, sens=RIGHT):
 
-        Mx.__init__(self, sens)
+        Mx.__init__(self, wire, sens)
         self.capacity = 1.0
         self.rackS = Rack(self.S, True)
