@@ -22,4 +22,22 @@ import Spring
 import Machine
 
 class Reference(object):
-    pass
+
+    def __init__(self, ref, Spring, Machine):
+        """
+            ref -- the reference, for indexing
+            Spring -- the Spring link <class>
+            Machine -- a Machine link <class> """
+
+        self.ref = ref
+        self.Spring = Spring
+        self.Machine = Machine
+
+    def save(self):
+        pass
+
+    def delete(self):
+        pass
+
+    def __str__(self):
+        pass
