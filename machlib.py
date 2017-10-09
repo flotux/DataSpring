@@ -113,7 +113,7 @@ class Slide(object):
 
             position -- the new position """
 
-        if not self.pesent:
+        if not self.present:
             self.position = position
             self.present = True
 
@@ -213,7 +213,6 @@ class MotorSlide(Slide):
     def __init__(self, position, fixed=False):
         """
             pos -- motor position (from 0 to 359)
-            motor -- motor name
             fixed -- if the motor is fixed on layout """
 
         Slide.__init__(self, position)
@@ -223,7 +222,13 @@ class MotorSlide(Slide):
         self.present = True
 
     def __str__(self):
-        pass
+
+        return "Motor Slide.\n\
+                Position : {}\n\
+                Fixed : {}\n\
+                Present : {}\n\
+                Element : {}\n"\
+                .format(self.position, self.fixed, self.present, self.elt.name)
 
 
 class Element(object):
