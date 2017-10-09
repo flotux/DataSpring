@@ -17,6 +17,10 @@ SOLID_ANGLE = 360
 LEFT = 'left'
 RIGHT = 'right'
 
+STEEL = 'Steel'
+INOX = 'Inox'
+MATERIAL = [STEEL, INOX]
+
 __all__ = ["sensor_tol", "one_degree", "body_length", "body_weight",
            "angle_move", "arc_feed"]
 
@@ -57,6 +61,18 @@ def body_weight(wire, nb):
 
     return (wire * nb) - wire
 
+
+def oob_diam(diam, material, diff=0.10):
+    """ Return the out of box diameter.
+
+        diam -- body diameter
+        material -- material of spring
+        diff -- diameter move after treatment """
+
+    if material is STEEL:
+        return diam + diff
+    else:
+        return diam - diff
 
 def angle_move(wire, diam, move):
     """ Return the angle movement for a diameter move.
