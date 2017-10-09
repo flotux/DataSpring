@@ -32,11 +32,10 @@ class Machine(object):
         #self.layout = {'0': None, '45': None, '90':None, '135': None,
         #               '180': None, '225': None, '270': None, '315': None}
         # the entry of the machine, do receive a str() a values.
-        self.entry = {'A1': None, 'A2': None, 'A3':None, 'A4': None,
+        self.entry = {'A1': None, 'A2': None, 'A3': None, 'A4': None,
                       'A5': None, 'A6': None, 'A7': None, 'A8': None}
         # the poka-yoke modules
-        self.sensors = {'M0': None, 'M1': None}
-        self.camera = None
+        self.sensors = {'M0': False, 'M1': False, 'SCD': False, 'CAM': False}
         # if a clamp is used
         self.clamp = False
 
@@ -47,8 +46,7 @@ class MxType(Machine):
     def __init__(self, wire, sens=RIGHT):
 
         Machine.__init__(self, wire, sens)
-        # the only rolling tools names is 'TB1 [wire diam]' in MX machines.
-        self.roll_tool = 'TB1 ' + str(wire)
+
         ## Initialisation of the MX layout ##
         self.S = MotorSlide(0, True)
         self.T = MotorSlide(45, True)
@@ -82,6 +80,8 @@ class Mx20(MxType):
 
         Mx.__init__(self, wire, sens)
         self.capacity = 2.0
+        # the only rolling tools in MX20 machines is 'TB1 [wire diam]'.
+        self.roll_tool = 'TB1 ' + str(wire)
 
 
 class Mx10(MxType):
@@ -92,3 +92,5 @@ class Mx10(MxType):
         Mx.__init__(self, wire, sens)
         self.capacity = 1.0
         self.rackS = Rack(self.S, True)
+        # the standard rolling tools is in MX10 machines is 'WT3 [wire diam]'.
+        self.roll_tool = 'WT3 ' + str(wire)
