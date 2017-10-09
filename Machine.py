@@ -7,6 +7,8 @@
 """ Machine
 
     TODO
+
+    Just limited at the MX's machine for the moment.
     """
 
 from machlib import *
