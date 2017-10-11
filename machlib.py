@@ -84,10 +84,10 @@ class Slide(object):
         self.position = position
         # present -- if the slide is actually monted on the machine.
         self.present = True
-        self.elt_mounted = False
-        # elt can have a --'SUPPORT' or 'SPINNER'--
+        self.module_mounted = False
+        # module can have a --'SUPPORT' or 'SPINNER'--
         # else he have None
-        self.elt = None
+        self.module = None
         # It's possible to describe the utility of a slide.
         self.descript = None
 
@@ -117,19 +117,19 @@ class Slide(object):
             self.position = position
             self.present = True
 
-    def add_elt(self, Element):
+    def add_module(self, Module):
         """ Add a element on Slide.
 
             Element -- the element (Spinner | Support) """
 
-        self.elt = Element
-        self.elt_mounted = True
+        self.module = Module
+        self.module_mounted = True
 
-    def rm_elt(self):
+    def rm_module(self):
         """ remove element on slide. """
 
-        self.elt = None
-        self.elt_mounted = False
+        self.module = None
+        self.module_mounted = False
 
     def descript(self, mess):
         """ Add a desciption of the slide utility in the actualy production.
@@ -227,64 +227,24 @@ class MotorSlide(Slide):
                 Position : {}\n\
                 Fixed : {}\n\
                 Present : {}\n\
-                Element : {}\n"\
-                .format(self.position, self.fixed, self.present, self.elt.name)
+                Module : {}\n"\
+                .format(self.position, self.fixed, self.present, self.module.name)
 
 
-class Element(object):
-    """ A Element is provided that position a Tool.
-        he can be mounted on a slide, he can be a Support
-        or a Spinner tool. """
+class RotaryMotor(object):
+    """ A rotary motor modulee provided that position a spinner tool.
+        her name is her axes. It's a empty class """
 
-    def __init__(self, Tool=None):
-
-        self.tool = Tool
-        # if the support a tool
-        self.have_tool = False
-
-    def add_tool(self, Tool):
-        """ mount a tool on support.
-
-            tool -- the tool to mount """
-
-        self.tool = Tool
-        self.have_tool = True
-
-    def rm_tool(self):
-        """ remove tool from support. """
-
-        self.tool = None
-        self.have_tool = False
+    def __init__(self):
+        pass
 
 
-class SpinnerMotor(Element):
-    """ A Spinner module provided that position a spinner tool. """
+class Support(object):
+    """ A support modulee provided that position a tool.
+        her name is her reference. It's a empty class """
 
-    def __init__(self, Tool=None, scale=None):
-        """
-            motor -- the motor of the spinner (P/Q/Y/X)
-            scale -OPTIONAL- the value of the vertical scale """
-
-        Element.__init__(self, Tool)
-        self.scale = scale
-
-    def move_scale(self, new_position):
-        """ for move the scale.
-
-            new_position -- the new position of the scale """
-
-        self.scale = new_position
-
-
-class Support(Element):
-    """ A support provided that position a tool. """
-
-    def __init__(self, name, Tool=None):
-        """
-            name -- the name of the support"""
-
-        Element.__init__(self, Tool)
-        self.name = name
+    def __init__(self):
+        pass
 
 
 class Rack(object):
