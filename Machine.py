@@ -6,15 +6,19 @@
 
 """ Machine
 
-    TODO
+    A collection of machine available in the enterprise.
+    contain all of information to represent a regulation paper.
 
-    Just limited at the MX's machine for the moment.
+    Use the machlib library to load (slide, tool, support, spin, rotary motor)
     """
 
 from machlib import *
 
 class Machine(object):
-    """ Represent a machine """
+    """ Represent a machine.
+
+        The machine do now the wire diameter of the spring to make the 
+        rolling tool. """
 
     def __init__(self, wire, sens):
         """
@@ -22,9 +26,12 @@ class Machine(object):
             sens -- the winding direction of the spring to produce
             """
 
-        self.capacity = None
+        ## information about the spring ##       
         self.sens, self.wire = sens, wire
+        ## information about machine ##
+        self.capacity = None
         self.roll_tool = None
+        # the standard cut tool in machines is named TC28
         self.cut_tool = Tool('TC28')
         self.clamp = False
         self.sensors = {'M0': False, 'M1': False, 'SCD': False, 'CAM': False}
@@ -61,15 +68,6 @@ class MotorType(Machine):
         self.z = MotorSlide(315)
         ## rotary motors ##
         self.p, self.q = RotaryMotor(), RotaryMotor()
-        ## supports ##
-        self.Supports = (SP, STA, STU, SC)
-        # avoid the winding direction, the cut slide
-        # are directly placed in standard position.
-        if self.sens is 'left':
-            pass
-        else:
-            pass
-
 
 
 class CamType(Machine):
@@ -128,8 +126,11 @@ class Mx20(MotorType):
         self.capacity = 2.0
         # the only rolling tools in MX20 machines is 'TB1 [wire diam]'.
         self.roll_tool = Tool(('TB1 ' + str(wire)))
-        self.ST = Support()
-        self.s.add_module(ST)
+        # create at the slide S a ST support with a rolling tool
+        # at the diameter
+        self.st = Support()
+        self.s.set_module(self.st)
+        self.s.set_tool(self.roll_tool)
 
 
 class Mx10(MotorType):
