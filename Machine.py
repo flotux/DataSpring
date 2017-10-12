@@ -33,6 +33,7 @@ class Machine(object):
         self.roll_tool = None
         # the standard cut tool in machines is named TC28
         self.cut_tool = Tool('TC28')
+        self.cut_support = Support('SC')
         self.clamp = False
         self.sensors = {'M0': False, 'M1': False, 'SCD': False, 'CAM': False}
         self.entry = {'A1': None, 'A2': None, 'A3': None, 'A4': None,
@@ -68,6 +69,16 @@ class MotorType(Machine):
         self.z = MotorSlide(315)
         ## rotary motors ##
         self.p, self.q = RotaryMotor(), RotaryMotor()
+        ## rolling tool and support by default ##
+        self.rolling_support = Support('ST')
+        self.s.set_module(self.rolling_support)
+        ## cut module by default ##
+        if self.sens is 'left':
+            self.z.set_module(self.cut_support)
+            self.z.set_tool(self.cut_tool)
+        else:
+            self.t.set_module(self.cut_support)
+            self.t.set_tool(self.cut_tool)
 
 
 class CamType(Machine):
@@ -128,8 +139,6 @@ class Mx20(MotorType):
         self.roll_tool = Tool(('TB1 ' + str(wire)))
         # create at the slide S a ST support with a rolling tool
         # at the diameter
-        self.st = Support()
-        self.s.set_module(self.st)
         self.s.set_tool(self.roll_tool)
 
 
