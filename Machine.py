@@ -51,24 +51,24 @@ class MotorType(Machine):
         Machine.__init__(self, wire, sens)
 
         ## initialisation of the MX layout ##
-        self.s = MotorSlide(0, True)
-        self.t = MotorSlide(45, True)
-        self.u = MotorSlide(90, True)
-        self.v = MotorSlide(135, True)
-        self.w = MotorSlide(180, True)
-        self.x = MotorSlide(225, True)
-        self.y = MotorSlide(270, True)
-        self.z = MotorSlide(315, True)
+        self.s = MotorSlide(0)
+        self.t = MotorSlide(45)
+        self.u = MotorSlide(90)
+        self.v = MotorSlide(135)
+        self.w = MotorSlide(180)
+        self.x = MotorSlide(225)
+        self.y = MotorSlide(270)
+        self.z = MotorSlide(315)
         ## rotary motors ##
-        self.p, self.q = SpinnerMotor(), SpinnerMotor()
+        self.p, self.q = RotaryMotor(), RotaryMotor()
         ## supports ##
         self.Supports = (SP, STA, STU, SC)
         # avoid the winding direction, the cut slide
         # are directly placed in standard position.
         if self.sens is 'left':
-            self.z.add_elt(Support(SC, self.cut_tool))
+            pass
         else:
-            self.t.add_elt(Support(SC, self.cut_tool))
+            pass
 
 
 
@@ -110,13 +110,13 @@ class CamType(Machine):
         self.slide7 = CammeSlide(315)
         ## rolling tool ##
         self.roll_tool = Tool(('WT3 ' + str(wire)))
-        self.s.add_elt(SUPPORT(STS, self.roll_tool))
+        #self.s.add_module(Support())
         # avoid the winding direction, the cut slide
         # are directly placed in standard position.
         if self.sens is 'left':
-            self.slide7.add_elt(Support(SC, self.cut_tool))
+            pass
         else:
-            self.slide1.add_elt(Support(SC, self.cut_tool))
+            pass
 
 
 class Mx20(MotorType):
@@ -128,7 +128,8 @@ class Mx20(MotorType):
         self.capacity = 2.0
         # the only rolling tools in MX20 machines is 'TB1 [wire diam]'.
         self.roll_tool = Tool(('TB1 ' + str(wire)))
-        self.s.add_elt(SUPPORT(ST, self.roll_tool))
+        self.ST = Support()
+        self.s.add_module(ST)
 
 
 class Mx10(MotorType):
@@ -141,7 +142,6 @@ class Mx10(MotorType):
         self.rackS = Rack(self.S, True)
         # the standard rolling tools is in MX10 machines is 'WT3 [wire diam]'.
         self.roll_tool = Tool(('WT3 ' + str(wire)))
-        self.s.add_elt(SUPPORT(ST, self.roll_tool))
 
 
 class Ax20(CamType):
@@ -151,9 +151,8 @@ class Ax20(CamType):
 
         CamType.__init__(self, wire, sens)
         self.x = MotorSlide(0)
-        self.p, self,q = SpinnerMotor(), SpinnerMotor()
+        self.p, self,q = RotaryMotor() , RotaryMotor()
         self.capacity = 2.0
-        self.s.add_elt(STS, self.roll_tool)
 
 
 class Mcs20(Ax20):
