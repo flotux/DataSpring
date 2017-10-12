@@ -75,68 +75,54 @@ def check_capacity(model, wire):
 
 
 class Slide(object):
-    """ A slide in the machine layout. """
+    """ A slide in the machine layout.
 
-    def __init__(self, position, fixed=False):
-        """
-            position -- the position of the slide in the layout """
+        Members :
+
+        - position -- position of the slide in the machine layout.
+        - module -- module mounted in the slide.
+        - element -- tool mounted in the slide.
+
+        A slide can be <MotorSlide> or <CammeSlide>. """
+
+    def __init__(self, position):
 
         self.position = position
-        # present -- if the slide is actually monted on the machine.
-        self.present = True
-        self.module_mounted = False
-        # module can have a --'SUPPORT' or 'SPINNER'--
-        # else he have None
         self.module = None
-        # It's possible to describe the utility of a slide.
+        self.element = None
         self.descript = None
 
-    def move(self, new_position):
-        """ Move the slide in the layout.
+    def get_position(self):
 
-            new_position -- he new position """
+        return self.position
 
-        if not self.fixed:
-            self.position = new_position
+    def set_module(self, m):
 
-    def remove(self):
-        """ Remove the slide in the layout.
-            the removing just set the position at None, the configuration are
-            keeeped. """
+        self.module = m
 
-        if not self.fixed:
-            self.position = None
-            self.present = False
+    def get_module(self):
 
-    def add(self, position):
-        """ Add slide in the layout previously removed.
+        return self.module
 
-            position -- the new position """
-
-        if not self.present:
-            self.position = position
-            self.present = True
-
-    def add_module(self, Module):
-        """ Add a element on Slide.
-
-            Element -- the element (Spinner | Support) """
-
-        self.module = Module
-        self.module_mounted = True
-
-    def rm_module(self):
-        """ remove element on slide. """
+    def del_module(self):
 
         self.module = None
-        self.module_mounted = False
 
-    def descript(self, mess):
-        """ Add a desciption of the slide utility in the actualy production.
+    def set_element(self, e):
 
-            mess -- A desciption of the slide utility """
+        self.element = e
 
-        self.descript = mess
+    def get_element(self):
+
+        return self.element
+
+    def set_descript(self, msg):
+
+        self.descript = msg
+
+    def get_descript(self):
+
+        return self.descript
 
     def __str__(self):
         pass
@@ -153,26 +139,21 @@ class CammeSlide(Slide):
             to over, the informations about camme are optional, she can be
             decide later.
 
-            position -- the position of the motor in the machine
-            cam -OPTINAL- camme used
-            cam_pos -OPTINAL- position of the camme
-            cam_sup -OPTINAL- support camme used """
+            position -- position of the motor in the machine
+            cam -- camme used
+            cam_pos -- camme position
+            cam_sup -- support camme used """
 
         Slide.__init__(self, position)
-        # if a camme is find out. <cam_pos> and <cam_sup> are not
-        # checked if not.
-        if cam:
-            self.cam = cam
-            if not cam_pos:
-                raise IllegalCammeSetError
-            self.cam_pos = cam_pos
-            if not cam_sup:
-                raise IllegalCammeSetError
-            self.cam_sup = cam_sup
-            self.have_cam = True
-        else:
-            self.cam, self.cam_pos, self.cam_sup = None, None, None
-            self.have_cam = False
+        self.cam, self.cam_pos, self.cam_sup = cam, cam_pos, cam_sup
+
+    def set_position(self, p):
+
+        self.position = p
+
+    def del_position(self):
+
+        self.position = None
 
     def add_cam(self, cam, cam_pos, cam_sup):
         """ Add a camme on slide.
@@ -183,17 +164,13 @@ class CammeSlide(Slide):
 
         self.cam, self.cam_pos, self.cam_sup = cam, cam_pos, cam_sup
 
-    def rm_cam(self):
-        """ Remove cam from slide. """
+    def del_cam(self):
 
         self.cam, self.cam_pos, self.cam_sup = None, None, None
 
-    def move_cam(self, new_position):
-        """ move cam position.
+    def set_cam_pos(self, p):
 
-            new_position -- the new position of the cam """
-
-        self.cam_pos = new_position
+        self.cam_pos = p
 
     def __str__(self):
 
@@ -210,23 +187,16 @@ class MotorSlide(Slide):
         created and places. A motor can be fixed on layout or removable
         """
 
-    def __init__(self, position, fixed=False):
+    def __init__(self, position):
         """
-            pos -- motor position (from 0 to 359)
-            fixed -- if the motor is fixed on layout """
+            position -- motor position (from 0 to 359) """
 
         Slide.__init__(self, position)
-        # if he is fixed
-        self.fixed = fixed
-        # if the slide is on the machine actually
-        self.present = True
 
     def __str__(self):
 
         return "Motor Slide.\n\
                 Position : {}\n\
-                Fixed : {}\n\
-                Present : {}\n\
                 Module : {}\n"\
                 .format(self.position, self.fixed, self.present, self.module.name)
 
@@ -251,12 +221,11 @@ class Rack(object):
     """ A rack, used on MX10,
         he must be place on a MotorSlide"""
 
-    def __init__(self, place, fixed=False):
+    def __init__(self, place):
         """
             place -- the placement of the rack (CammeSlide|MotorSlide) """
 
-        self.place = place
-        self.fixed = fixed
+        self.position = position
 
 
 class Tool(object):
