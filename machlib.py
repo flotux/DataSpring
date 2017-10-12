@@ -89,7 +89,7 @@ class Slide(object):
 
         self.position = position
         self.module = None
-        self.element = None
+        self.tool = None
         self.descript = None
 
     def get_position(self):
@@ -108,13 +108,13 @@ class Slide(object):
 
         self.module = None
 
-    def set_element(self, e):
+    def set_tool(self, t):
 
-        self.element = e
+        self.tool = t
 
-    def get_element(self):
+    def get_tool(self):
 
-        return self.element
+        return self.tool
 
     def set_descript(self, msg):
 
@@ -227,24 +227,32 @@ class Rack(object):
 
         self.position = position
 
+class Tools(object):
+    """ A abstract class for inscantiation of tools. """
 
-class Tool(object):
+    def __init__(self, name):
+
+        self.name = name
+
+
+class Tool(Tools):
     """ A tool on the machine. """
 
     def __init__(self, name):
         """
             name -- the name of the tool """
 
-        self.name = name
+        Tools.__init__(self, name)
 
-class Spinner(Tool):
-    """ A spinner mounted in a spinner motor. """
+
+class Spin(Tools):
+    """ A spin mounted in a rotary  motor. """
 
     def __init__(self, name):
         """
-            name -- the name of the spinner """
+            name -- the name of the spin """
 
-        Tool.__init__(self, name)
+        Tools.__init__(self, name)
 
 # Error Class
 class MachlibError(Exception):
