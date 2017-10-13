@@ -74,6 +74,7 @@ def oob_diam(diam, material, diff=0.10):
     else:
         return diam - diff
 
+
 def angle_move(wire, diam, move):
     """ Return the angle movement for a diameter move.
 
