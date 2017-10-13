@@ -58,6 +58,7 @@ SPINNER_MOTOR = 'SPINNER_MOTOR'
 SUPPORT = 'SUPPORT'
 ELEMENTS_LIST = (SPINNER_MOTOR, SUPPORT)
 
+
 def check_capacity(model, wire):
     """ Check if the machine have the capacity too
         produce the spring.
@@ -198,7 +199,7 @@ class MotorSlide(Slide):
         return "Motor Slide.\n\
                 Position : {}\n\
                 Module : {}\n"\
-                .format(self.position, self.fixed, self.present, self.module.name)
+                .format(self.position, self.module)
 
 
 class RotaryMotor(object):
@@ -213,8 +214,9 @@ class Support(object):
     """ A support modulee provided that position a tool.
         her name is her reference. It's a empty class """
 
-    def __init__(self):
-        pass
+    def __init__(self, name):
+
+        self.name = name
 
 
 class Rack(object):
@@ -226,6 +228,7 @@ class Rack(object):
             place -- the placement of the rack (CammeSlide|MotorSlide) """
 
         self.position = position
+
 
 class Tools(object):
     """ A abstract class for inscantiation of tools. """
@@ -253,6 +256,7 @@ class Spin(Tools):
             name -- the name of the spin """
 
         Tools.__init__(self, name)
+
 
 # Error Class
 class MachlibError(Exception):

@@ -14,10 +14,11 @@
 
 from machlib import *
 
+
 class Machine(object):
     """ Represent a machine.
 
-        The machine do now the wire diameter of the spring to make the 
+        The machine do now the wire diameter of the spring to make the
         rolling tool. """
 
     def __init__(self, wire, sens):
@@ -26,11 +27,13 @@ class Machine(object):
             sens -- the winding direction of the spring to produce
             """
 
-        ## information about the spring ##       
+        # information about the spring
         self.sens, self.wire = sens, wire
-        ## information about machine ##
+
+        # information about machine
         self.capacity = None
         self.roll_tool = None
+
         # the standard cut tool in machines is named TC28
         self.cut_tool = Tool('TC28')
         self.cut_support = Support('SC')
@@ -58,7 +61,7 @@ class MotorType(Machine):
 
         Machine.__init__(self, wire, sens)
 
-        ## initialisation of the MX layout ##
+        # initialisation of the MX layout
         self.s = MotorSlide(0)
         self.t = MotorSlide(45)
         self.u = MotorSlide(90)
@@ -67,12 +70,15 @@ class MotorType(Machine):
         self.x = MotorSlide(225)
         self.y = MotorSlide(270)
         self.z = MotorSlide(315)
-        ## rotary motors ##
+
+        # rotary motors
         self.p, self.q = RotaryMotor(), RotaryMotor()
-        ## rolling tool and support by default ##
+
+        # rolling tool and support by default
         self.rolling_support = Support('ST')
         self.s.set_module(self.rolling_support)
-        ## cut module by default ##
+
+        # cut module by default
         if self.sens is 'left':
             self.z.set_module(self.cut_support)
             self.z.set_tool(self.cut_tool)
@@ -108,7 +114,8 @@ class CamType(Machine):
     def __init__(self, wire, sens):
 
         Machine.__init__(self, wire, sens)
-        ## initalisation of the camme layout ##
+
+        # initalisation of the camme layout
         # slide0 not initialized
         self.slide1 = CammeSlide(45)
         self.slide2 = CammeSlide(90)
@@ -117,9 +124,10 @@ class CamType(Machine):
         self.slide5 = CammeSlide(225)
         self.slide6 = CammeSlide(270)
         self.slide7 = CammeSlide(315)
-        ## rolling tool ##
+
+        # rolling tool
         self.roll_tool = Tool(('WT3 ' + str(wire)))
-        #self.s.add_module(Support())
+
         # avoid the winding direction, the cut slide
         # are directly placed in standard position.
         if self.sens is 'left':
@@ -135,8 +143,10 @@ class Mx20(MotorType):
 
         MotorType.__init__(self, wire, sens)
         self.capacity = 2.0
+
         # the only rolling tools in MX20 machines is 'TB1 [wire diam]'.
         self.roll_tool = Tool(('TB1 ' + str(wire)))
+
         # create at the slide S a ST support with a rolling tool
         # at the diameter
         self.s.set_tool(self.roll_tool)
@@ -150,6 +160,7 @@ class Mx10(MotorType):
         MotorType.__init__(self, wire, sens)
         self.capacity = 1.0
         self.rackS = Rack(self.S, True)
+
         # the standard rolling tools is in MX10 machines is 'WT3 [wire diam]'.
         self.roll_tool = Tool(('WT3 ' + str(wire)))
 
@@ -161,7 +172,7 @@ class Ax20(CamType):
 
         CamType.__init__(self, wire, sens)
         self.x = MotorSlide(0)
-        self.p, self,q = RotaryMotor() , RotaryMotor()
+        self.p, self.q = RotaryMotor(), RotaryMotor()
         self.capacity = 2.0
 
 
