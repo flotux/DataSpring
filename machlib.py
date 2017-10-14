@@ -165,6 +165,14 @@ class CammeSlide(Slide):
 
         self.cam, self.cam_pos, self.cam_sup = cam, cam_pos, cam_sup
 
+    def get_cam(self):
+
+        return self.cam
+
+    def set_cam(self, c):
+
+        self.cam = c
+
     def del_cam(self):
 
         self.cam, self.cam_pos, self.cam_sup = None, None, None
@@ -172,6 +180,18 @@ class CammeSlide(Slide):
     def set_cam_pos(self, p):
 
         self.cam_pos = p
+
+    def get_cam_pos(self):
+
+        return self.cam_pos
+
+    def set_cam_sup(self, s):
+
+        self.cam_sup = s
+
+    def get_cam_sup(self):
+
+        return self.cam_sup
 
     def __str__(self):
 
@@ -206,8 +226,17 @@ class RotaryMotor(object):
     """ A rotary motor modulee provided that position a spinner tool.
         her name is her axes. It's a empty class """
 
-    def __init__(self):
-        pass
+    def __init__(self, scale=None):
+        
+        self.scale = scale
+
+    def set_scale(self, s):
+
+        self.scale = s
+
+    def get_scale(self):
+
+        return self.scale
 
 
 class Support(object):
