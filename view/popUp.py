@@ -36,28 +36,20 @@ class NewRegulationViewer(Tk):
         self.resizable(False,False)
 
         # Selection of the Machine
-        self.f = LabelFrame(self, text="Machine utilisee : ")
-        self.f.grid(row=1, column=1, pady=20, padx=10)
-        # 2mm machines
-        self.bton1 = Button(self.f, text="MX20", relief=FLAT)
-        self.bton1.grid(row=2, column=2, columnspan=3, ipadx=50)
-        self.bton2 = Button(self.f, text="RX20", relief=FLAT)
-        self.bton2.grid(row=3, column=2, columnspan=3, ipadx=50)
-        self.bton3 = Button(self.f, text="MCS20", relief=FLAT)
-        self.bton3.grid(row=4, column=2, columnspan=3, ipadx=50)
-        self.bton4 = Button(self.f, text="AX20", relief=FLAT)
-        self.bton4.grid(row=5, column=2, columnspan=3, ipadx=50)
-        # 1.5mm machines
-        self.bton5 = Button(self.f, text="MCS-15G", relief=FLAT)
-        self.bton5.grid(row=6, column=2, columnspan=3, ipadx=50)
-        self.bton6 = Button(self.f, text="SX15", relief=FLAT)
-        self.bton6.grid(row=7, column=2, columnspan=3, ipadx=50)
-        # 1mm machines
-        self.bton7 = Button(self.f, text="MX10", relief=FLAT)
-        self.bton7.grid(row=8, column=2, columnspan=3, ipadx=50)
+        self.fm = LabelFrame(self, text="Machine utilisee : ")
+        self.fm.grid(row=1, column=1, pady=20, padx=10)
+        self.list_machine = Listbox(self.fm)
+        self.list_machine.insert(1, "RX20")
+        self.list_machine.insert(2, "MX20")
+        self.list_machine.insert(3, "MCS20")
+        self.list_machine.insert(4, "AX20")
+        self.list_machine.insert(5, "MCS15-G")
+        self.list_machine.insert(6, "SX15")
+        self.list_machine.insert(7, "MX10")
+        self.list_machine.pack(padx=10, pady=5)
 
         self.quit_bton = Button(self, text="Quitter", command=self.destroy)
-        self.quit_bton.grid(row=10, column=10, padx=2)
+        self.quit_bton.grid(row=3, column=10, padx=2)
 
 class EntryConf(Tk):
     """ Configure Entry. """
