@@ -33,7 +33,6 @@ class NewRegulationViewer(Tk):
     def __init__(self):
         Tk.__init__(self)
         self.title(NEW_REGULATION)
-        self.resizable(False,False)
 
         # Selection of the Machine
         self.fm = LabelFrame(self, text="Machine utilisee : ")
@@ -48,8 +47,14 @@ class NewRegulationViewer(Tk):
         self.list_machine.insert(7, "MX10")
         self.list_machine.pack(padx=10, pady=5)
 
+        self.fw = LabelFrame(self, text="Diametre du fil : ")
+        self.fw.grid(row=1, column=2, pady=20, padx=10)
+        self.wire = DoubleVar()
+        self.scale_wire = Spinbox(self.fw, from_=0.1, to=2.0)
+        self.scale_wire.pack()
+
         self.quit_bton = Button(self, text="Quitter", command=self.destroy)
-        self.quit_bton.grid(row=3, column=10, padx=2)
+        self.quit_bton.grid(row=30, column=10, padx=2)
 
 class EntryConf(Tk):
     """ Configure Entry. """
