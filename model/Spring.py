@@ -9,8 +9,6 @@
     A representation of a spring.
     """
 
-import sprlib
-
 class Spring(object):
 
     def __init__(self, ind, wire, diam, diam_tol, nb,

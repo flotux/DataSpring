@@ -12,8 +12,6 @@
     Use the machlib library to load (slide, tool, support, spin, rotary motor)
     """
 
-from machlib import *
-
 
 class Machine(object):
     """ Represent a machine.

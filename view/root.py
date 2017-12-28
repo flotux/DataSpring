@@ -16,7 +16,7 @@ APP_NAME = "Data springs"
         """
 
 from tkinter import *
-import popUp
+from . import popUp
 
 class StartMenu(Tk):
     """ The menu at the start of the programme. """
