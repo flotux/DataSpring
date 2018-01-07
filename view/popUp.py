@@ -39,18 +39,31 @@ class NewRegulationViewer(Tk):
         Tk.__init__(self)
         self.title(NEW_REGULATION)
 
-        self.machine_frame()
-        self.wire_frame()
+        self.identity()
+        self.machine()
+        self.wire()
 
         self.quit_bton = Button(self, text="Quitter", command=self.destroy)
         self.quit_bton.grid(row=30, column=10, padx=2)
 
-    def machine_frame(self):
+    def identity(self):
+        """ A frame for enter informations about the customer
+            and the references.
+            """
+
+        Label(self, text="Reference Piece : ").grid(row=0, column=1, padx=10, pady=8)
+        self.id = Entry(self, width=20)
+        self.id.grid(row=0, column=2)
+        Label(self, text="Client : ").grid(row=0, column=3, padx=10, pady=8)
+        self.customer = Entry(self, width=10)
+        self.customer.grid(row=0, column=4)
+
+    def machine(self):
         """ A frame for selected the machine.
             """
 
         self.fm = LabelFrame(self, text=MACHINE_SELECTOR_LABEL)
-        self.fm.grid(row=1, column=1, pady=20, padx=10)
+        self.fm.grid(row=1, column=1, pady=20, padx=10, columnspan=2)
         # Machine selection listBox
         self.listMachine = Listbox(self.fm, height=7, width=16)
         for ind, elt in enumerate(utils.machlib.MODEL_LIST):
@@ -58,13 +71,13 @@ class NewRegulationViewer(Tk):
         self.listMachine.bind('<ButtonRelease-1>',self.machine_select)
         self.listMachine.pack(padx=10, pady=5)
 
-    def wire_frame(self):
+    def wire(self):
         """ A frame for enter the diameter, references and
             material of the wire.
             """
 
         self.fw = LabelFrame(self, text=WIRE_DIAMETER_LABEL)
-        self.fw.grid(row=1, column=2, pady=20, padx=10)
+        self.fw.grid(row=1, column=3, pady=20, padx=10, columnspan=2)
         self.wire = DoubleVar()
         self.wire.set(0.4)
         self.scaleWire = Spinbox(self.fw, from_=0.4, to=2.0, width=8,\
@@ -93,6 +106,14 @@ class NewRegulationViewer(Tk):
                                 width=4)
         self.inox.grid(row=1, column=2)
         self.inox.deselect()
+
+    def spring(self):
+        pass
+
+    def tools(self):
+        pass
+
+
 
     def machine_select(self, evt):
         """ Whrite the machine selected on <listMachine> to
