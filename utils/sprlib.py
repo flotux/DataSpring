@@ -16,10 +16,10 @@ PI = math.pi
 SOLID_ANGLE = 360
 LEFT = 'left'
 RIGHT = 'right'
-
 STEEL = 'Steel'
 INOX = 'Inox'
-MATERIAL = [STEEL, INOX]
+MATERIAL = ["Acier", "Inox"]
+
 
 __all__ = ["sensor_tol", "one_degree", "body_length", "body_weight",
            "angle_move", "arc_feed"]
