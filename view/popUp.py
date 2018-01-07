@@ -38,6 +38,7 @@ class NewRegulationViewer(Tk):
     def __init__(self):
         Tk.__init__(self)
         self.title(NEW_REGULATION)
+        self.sep = ("_" * 80)
 
         self.identity()
         self.machine()
@@ -45,7 +46,9 @@ class NewRegulationViewer(Tk):
         self.spring()
 
         self.quit_bton = Button(self, text="Quitter", command=self.destroy)
-        self.quit_bton.grid(row=30, column=10, padx=2)
+        self.quit_bton.grid(row=30, column=10, padx=2, pady=5)
+        self.next_bton = Button(self, text="Suivant")
+        self.next_bton.grid(row=30, column=9, padx=2, pady=5)
 
     def identity(self):
         """ A frame for enter informations about the customer
@@ -92,8 +95,8 @@ class NewRegulationViewer(Tk):
         # Wire references
         Label(self.fw, text="Reference : ").grid(row=2, column=1, \
                                                  padx=10, pady=8)
-        self.entryWireRef = Entry(self.fw, width=10)
-        self.entryWireRef.grid(row=2, column=2)
+        self.entry_w_ref = Entry(self.fw, width=10)
+        self.entry_w_ref.grid(row=2, column=2)
         # Wire material
         self.material = StringVar()
         self.material.set("Acier")
@@ -113,7 +116,6 @@ class NewRegulationViewer(Tk):
 
     def spring(self):
 
-        self.sep = ("_" * 80)
         Label(self, text=self.sep).grid(row=2, padx=2, pady=10, columnspan=10)
 
         self.fs = Frame(self)
@@ -140,30 +142,28 @@ class NewRegulationViewer(Tk):
                                                          padx=5, pady=8)
         self.diam = DoubleVar()
         self.diam.set(10.00)
-        self.entryDiam = Entry(self.fs, width=10)
-        self.entryDiam.grid(row=2, column=2)
+        self.entry_diam = Entry(self.fs, width=10)
+        self.entry_diam.grid(row=2, column=2)
         Label(self.fs, text="mm").grid(row=2, column=3)
 
         Label(self.fs, text="Nombre de spire : ").grid(row=3, column=1, \
                                                          padx=5, pady=8)
         self.nb = DoubleVar()
         self.nb.set(10.00)
-        self.entryNb = Entry(self.fs, width=10)
-        self.entryNb.grid(row=3, column=2)
+        self.entry_nb = Entry(self.fs, width=10)
+        self.entry_nb.grid(row=3, column=2)
         Label(self.fs, text="spires").grid(row=3, column=3)
 
         Label(self.fs, text="Tolerance diametre +/- : ").grid(row=4, column=1, \
                                                          padx=5, pady=8)
         self.tol = DoubleVar()
         self.tol.set(0.10)
-        self.entryTol = Entry(self.fs, width=10)
-        self.entryTol.grid(row=4, column=2)
+        self.entry_tol = Entry(self.fs, width=10)
+        self.entry_tol.grid(row=4, column=2)
         Label(self.fs, text="mm").grid(row=4, column=3)
 
     def tools(self):
         pass
-
-
 
     def machine_select(self, evt):
         """ Whrite the machine selected on <listMachine> to
