@@ -38,7 +38,7 @@ class Root(Tk):
         self.menuNew.add_command(label="Feuille d'outillage", command=None)
         self.menuFile.add_cascade(label="Nouveau", menu=self.menuNew)
 
-        self.menuFile.add_command(label="Ouvrir", command=None)
+        self.menuFile.add_command(label="Ouvrir", command=self.launch_overview)
         self.menuFile.add_separator()
         self.menuFile.add_command(label="Sauvegarder", command=None)
         self.menuFile.add_command(label="Sauvegarder sous...", command=None)
@@ -48,14 +48,16 @@ class Root(Tk):
 
         self.config(menu=self.menuBar)
 
-        self.path = OverView()
-        self.destroy()
-        self.path.mainloop()
 
     def new_reg(self):
         """ Used too lauch a new regulation viewer """
 
         self.path = popUp.NewRegulationViewer()
+        self.path.mainloop()
+
+    def launch_overview(self):
+
+        self.path = OverView()
         self.path.mainloop()
 
 
@@ -68,6 +70,11 @@ class OverView(Tk):
     def overlay(self):
         """ Overlay of the machine.
             """
+
+        def add():
+
+            path = popUp.Add_slide()
+            path.mainloop()
 
         # width
         canw = 220
@@ -89,7 +96,7 @@ class OverView(Tk):
 
         self.bloc1 = LabelFrame(self, width=blocw, height=bloch)
         self.bloc1.grid(row=0, column=2, padx=10, pady=10)
-        self.add1 = Button(self.bloc1, text="AJOUTER")
+        self.add1 = Button(self.bloc1, text="AJOUTER", command=add)
         self.add1.pack()
         self.bloc2 = LabelFrame(self, width=blocw, height=bloch)
         self.bloc2.grid(row=0, column=5, padx=10, pady=10)
@@ -107,6 +114,7 @@ class OverView(Tk):
         self.bloc7.grid(row=2, column=0, padx=10, pady=10)
         self.bloc8 = LabelFrame(self, width=blocw, height=bloch)
         self.bloc8.grid(row=0, column=0, padx=10, pady=10)
+
 
     def characteristic(self):
         pass

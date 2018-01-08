@@ -180,6 +180,38 @@ class NewRegulationViewer(Tk):
         pass
 
 
+class Add_slide(Tk):
+    """ Add a slide in overlay.
+        """
+
+    def __init__(self):
+        Tk.__init__(self)
+
+        self.f = Frame(self)
+        self.f.pack()
+
+        self.tool = Button(self.f, text="Outil", command=self.tool, width=10)
+        self.tool.grid(row=1, column=1, pady=10)
+        self.spin = Button(self.f, text="Tournette", command=self.spin, width=10)
+        self.spin.grid(row=1, column=3, pady=10)
+
+        self.lf = LabelFrame(self.f, text="Informations", width=400, height=200)
+        self.lf.grid(row=2, column=1, padx=10, pady=10, columnspan=4)
+
+        self.quit = Button(self.f, text="Quitter", command=self.destroy)
+        self.quit.grid(row=20, column=4, pady=5, padx=5)
+        self.next = Button(self.f, text="Suivant", command=None)
+        self.next.grid(row=20, column=3, pady=5, padx=1)
+
+    def tool(self):
+        """ for add a tool. """
+        pass
+
+    def spin(self):
+        """ for add a spinner. """
+        pass
+
+
 class EntryConf(Tk):
     """ Configure Entry. """
     pass
