@@ -22,9 +22,9 @@ MX10 = {"name": "MX10", "capacity": 1.0}
 # Listing of model available.
 # Stocked on a tuple, because she do not need to be modify.
 MODEL_LIST = (MX20, MCS20, AX20, MCS15G, SX15, MX10)
-FULL_MOTOR_MACHINE = (MX20, MX10)
-MIX_MOTOR_MACHINE = (MCS20, AX20)
-CAMME_MACHINE = (MCS15G, SX15)
+FULL_MOTOR_MACHINE = (MX20.get("name"), MX10.get("name"))
+CAM_MACHINE = (MCS20.get("name"), AX20.get("name"), \
+               MCS15G.get("name"), SX15.get("name"))
 
 # Support
 STA = "STA"
