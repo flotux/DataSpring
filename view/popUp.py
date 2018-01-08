@@ -105,12 +105,12 @@ class NewRegulationViewer(Tk):
         self.radiogroup_mat.grid(row=3, column=2)
         self.steel = Radiobutton(self.radiogroup_mat, text="Acier", indicatoron=0, \
                                  variable=self.material, value="steel", \
-                                 width=4, activebackground="LightBlue")
+                                 width=4, selectcolor="LightBlue")
         self.steel.grid(row=1, column=1)
         self.steel.deselect()
         self.inox = Radiobutton(self.radiogroup_mat, text="Inox", indicatoron=0, \
                                 variable=self.material, value="inox", \
-                                width=4, activebackground="LightBlue")
+                                width=4, selectcolor="LightBlue")
         self.inox.grid(row=1, column=2)
         self.inox.deselect()
 
@@ -129,12 +129,12 @@ class NewRegulationViewer(Tk):
         self.radiogroup_dir.grid(row=1, column=2)
         self.right = Radiobutton(self.radiogroup_dir, text="Droite", indicatoron=0, \
                                  variable=self.dir, value="right", \
-                                 width=8, activebackground="LightBlue")
+                                 width=8, selectcolor="LightBlue")
         self.right.grid(row=1, column=2)
         self.right.deselect()
         self.left = Radiobutton(self.radiogroup_dir, text="Gauche", indicatoron=0, \
                                 variable=self.dir, value="left", \
-                                width=8, activebackground="LightBlue")
+                                width=8, selectcolor="LightBlue")
         self.left.grid(row=1, column=3)
         self.left.deselect()
 
@@ -195,6 +195,8 @@ class Add_slide(Tk):
         Tk.__init__(self)
         self.resizable(False, False)
         self.machine = machine
+        self.sup = StringVar()
+
 
         self.f1 = Frame(self)
         self.f1.grid(row=1, column=1, padx=70, pady=10)
@@ -217,31 +219,35 @@ class Add_slide(Tk):
     def tool(self):
         """ for add a tool. """
 
-        def add_sta():
-            self.sta.config(bg="LightBlue")
-            self.stu.config(bg="Grey")
-            self.sc.config(bg="Grey")
-
-        def add_stu():
-            self.stu.config(bg="LightBlue")
-            self.sta.config(bg="Grey")
-            self.sc.config(bg="Grey")
-
-
-        def add_sc():
-            self.sc.config(bg="LightBlue")
-            self.sta.config(bg="Grey")
-            self.stu.config(bg="Grey")
-
-
         self.tool_b.config(bg="LightBlue")
+        self.spin_b.config(bg="LightGrey")
 
-        self.sta = Button(self.lf, text="STA", command=add_sta, width=8)
+        self.f2.destroy()
+        self.f2 = Frame(self)
+        self.f2.grid(row=2, column=1)
+        self.lf = LabelFrame(self.f2, text="Informations", width=120, height=100)
+        self.lf.pack()
+
+        radiogroup = Frame(self.lf)
+        radiogroup.grid(row=0, column=1, padx=10, pady=15, columnspan=5)
+        self.sta = Radiobutton(radiogroup, text="STA", indicatoron=0, \
+                               variable=self.sup, value="STA", \
+                               width=8, selectcolor="LightBlue")
         self.sta.grid(row=0, column=1, padx=10, pady=10)
-        self.stu = Button(self.lf, text="STU", command=add_stu, width=8)
+        self.stu = Radiobutton(radiogroup, text="STU", indicatoron=0, \
+                               variable=self.sup, value="STU", \
+                               width=8, selectcolor="LightBlue")
         self.stu.grid(row=0, column=2, padx=10, pady=10)
-        self.sc = Button(self.lf, text="SC", command=add_sc, width=8)
+        self.sc = Radiobutton(radiogroup, text="SC", indicatoron=0, \
+                              variable=self.sup, value="SC", \
+                              width=8, selectcolor="LightBlue")
         self.sc.grid(row=0, column=3, padx=10, pady=10)
+
+        if self.machine in utils.machlib.CAM_MACHINE:
+            self.stb = Radiobutton(radiogroup, text="STB", indicatoron=0, \
+                                   variable=self.sup, value="STB", \
+                                   width=8, selectcolor="LightBlue")
+            self.stb.grid(row=0, column=4, padx=10, pady=10)
 
         Label(self.lf, text="Nom : ", width=10).grid(row=1, column=1, padx=10, pady=5)
         self.name_e = Entry(self.lf, width=20)
@@ -258,12 +264,29 @@ class Add_slide(Tk):
         self.next = Button(self.f3, text="Suivant", command=None)
         self.next.grid(row=1, column=1, padx=10, pady=5)
 
-
-
     def spin(self):
         """ for add a spinner. """
-        pass
 
+        self.spin_b.config(bg="LightBlue")
+        self.tool_b.config(bg="LightGrey")
+
+        self.f2.destroy()
+        self.f2 = Frame(self)
+        self.f2.grid(row=2, column=1)
+        self.lf = LabelFrame(self.f2, text="Informations", width=120, height=100)
+        self.lf.pack()
+
+        radiogroup = Frame(self.lf)
+        radiogroup.grid(row=0, column=1, padx=10, pady=15, columnspan=5)
+        self.sp = Radiobutton(radiogroup, text="SP", indicatoron=0, \
+                               variable=self.sup, value="SP", \
+                               width=8, selectcolor="LightBlue")
+        self.sp.grid(row=0, column=1, padx=10, pady=10)
+        if self.machine in utils.machlib.CAM_MACHINE:
+            self.sps = Radiobutton(radiogroup, text="SPS", indicatoron=0, \
+                                   variable=self.sup, value="SPS", \
+                                   width=8, selectcolor="LightBlue")
+            self.sps.grid(row=0, column=2, padx=10, pady=10)
 
 class EntryConf(Tk):
     """ Configure Entry. """
