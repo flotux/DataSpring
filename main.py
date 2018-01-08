@@ -7,7 +7,7 @@
 import view.root
 
 def main():
-    a = view.root.StartMenu()
+    a = view.root.Root()
     a.mainloop()
 
 if __name__ == '__main__':
