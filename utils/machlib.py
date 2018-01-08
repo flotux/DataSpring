@@ -22,6 +22,9 @@ MX10 = {"name": "MX10", "capacity": 1.0}
 # Listing of model available.
 # Stocked on a tuple, because she do not need to be modify.
 MODEL_LIST = (MX20, MCS20, AX20, MCS15G, SX15, MX10)
+FULL_MOTOR_MACHINE = (MX20, MX10)
+MIX_MOTOR_MACHINE = (MCS20, AX20)
+CAMME_MACHINE = (MCS15G, SX15)
 
 # Support
 STA = "STA"
@@ -227,7 +230,7 @@ class RotaryMotor(object):
         her name is her axes. It's a empty class """
 
     def __init__(self, scale=None):
-        
+
         self.scale = scale
 
     def set_scale(self, s):
