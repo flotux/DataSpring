@@ -57,8 +57,8 @@ class NewRegulationViewer(Tk):
 
         Label(self, text="Reference Piece : ").grid(row=0, column=1, \
                                                     padx=10, pady=8)
-        self.id = Entry(self, width=20)
-        self.id.grid(row=0, column=2)
+        self.id_e = Entry(self, width=20)
+        self.id_e.grid(row=0, column=2)
         Label(self, text="Client : ").grid(row=0, column=3, padx=10, pady=8)
         self.customer = Entry(self, width=10)
         self.customer.grid(row=0, column=4)
@@ -95,8 +95,8 @@ class NewRegulationViewer(Tk):
         # Wire references
         Label(self.fw, text="Reference : ").grid(row=2, column=1, \
                                                  padx=10, pady=8)
-        self.entry_w_ref = Entry(self.fw, width=10)
-        self.entry_w_ref.grid(row=2, column=2)
+        self.wire_ref_e = Entry(self.fw, width=10)
+        self.wire_ref_e.grid(row=2, column=2)
         # Wire material
         self.material = StringVar()
         self.material.set("Acier")
@@ -105,12 +105,12 @@ class NewRegulationViewer(Tk):
         self.radiogroup_mat.grid(row=3, column=2)
         self.steel = Radiobutton(self.radiogroup_mat, text="Acier", indicatoron=0, \
                                  variable=self.material, value="steel", \
-                                 width=4)
+                                 width=4, activebackground="LightBlue")
         self.steel.grid(row=1, column=1)
         self.steel.deselect()
         self.inox = Radiobutton(self.radiogroup_mat, text="Inox", indicatoron=0, \
                                 variable=self.material, value="inox", \
-                                width=4)
+                                width=4, activebackground="LightBlue")
         self.inox.grid(row=1, column=2)
         self.inox.deselect()
 
@@ -129,12 +129,12 @@ class NewRegulationViewer(Tk):
         self.radiogroup_dir.grid(row=1, column=2)
         self.right = Radiobutton(self.radiogroup_dir, text="Droite", indicatoron=0, \
                                  variable=self.dir, value="right", \
-                                 width=8)
+                                 width=8, activebackground="LightBlue")
         self.right.grid(row=1, column=2)
         self.right.deselect()
         self.left = Radiobutton(self.radiogroup_dir, text="Gauche", indicatoron=0, \
                                 variable=self.dir, value="left", \
-                                width=8)
+                                width=8, activebackground="LightBlue")
         self.left.grid(row=1, column=3)
         self.left.deselect()
 
@@ -142,24 +142,24 @@ class NewRegulationViewer(Tk):
                                                          padx=5, pady=8)
         self.diam = DoubleVar()
         self.diam.set(10.00)
-        self.entry_diam = Entry(self.fs, width=10)
-        self.entry_diam.grid(row=2, column=2)
+        self.diam_e = Entry(self.fs, width=10)
+        self.diam_e.grid(row=2, column=2)
         Label(self.fs, text="mm").grid(row=2, column=3)
 
         Label(self.fs, text="Nombre de spire : ").grid(row=3, column=1, \
                                                          padx=5, pady=8)
         self.nb = DoubleVar()
         self.nb.set(10.00)
-        self.entry_nb = Entry(self.fs, width=10)
-        self.entry_nb.grid(row=3, column=2)
+        self.nb_e = Entry(self.fs, width=10)
+        self.nb_e.grid(row=3, column=2)
         Label(self.fs, text="spires").grid(row=3, column=3)
 
         Label(self.fs, text="Tolerance diametre +/- : ").grid(row=4, column=1, \
                                                          padx=5, pady=8)
         self.tol = DoubleVar()
         self.tol.set(0.10)
-        self.entry_tol = Entry(self.fs, width=10)
-        self.entry_tol.grid(row=4, column=2)
+        self.tol_e = Entry(self.fs, width=10)
+        self.tol_e.grid(row=4, column=2)
         Label(self.fs, text="mm").grid(row=4, column=3)
 
     def tools(self):
@@ -171,7 +171,13 @@ class NewRegulationViewer(Tk):
             Configure the maximum wire diameter for <scaleWire> with
             the machine capacity. """
 
+        ind = 0
+        while ind < self.listMachine.size():
+            self.listMachine.itemconfig(ind, bg="White")
+            ind += 1
+            
         i=self.listMachine.curselection()
+        self.listMachine.itemconfig(i[0], bg="LightBlue")
         self.machine = utils.machlib.MODEL_LIST[i[0]]
         self.scaleWire.config(to=self.machine.get("capacity"))
 
@@ -184,28 +190,41 @@ class Add_slide(Tk):
     """ Add a slide in overlay.
         """
 
-    def __init__(self):
-        Tk.__init__(self)
+    def __init__(self, machine):
 
-        self.f = Frame(self)
+        Tk.__init__(self)
+        self.resizable(False, False)
+        self.machine = machine
+
+        self.f = Frame(self, width=400, height=300)
         self.f.pack()
 
-        self.tool = Button(self.f, text="Outil", command=self.tool, width=10)
-        self.tool.grid(row=1, column=1, pady=10)
-        self.spin = Button(self.f, text="Tournette", command=self.spin, width=10)
-        self.spin.grid(row=1, column=3, pady=10)
+        self.tool_b = Button(self.f, text="Outil", command=self.tool, width=10)
+        self.tool_b.grid(row=1, column=2, pady=10)
+        self.spin_b = Button(self.f, text="Tournette", command=self.spin, width=10)
+        self.spin_b.grid(row=1, column=3, pady=10)
 
         self.lf = LabelFrame(self.f, text="Informations", width=400, height=200)
-        self.lf.grid(row=2, column=1, padx=10, pady=10, columnspan=4)
+        self.lf.grid(row=2, column=1, padx=10, pady=10, columnspan=10)
 
         self.quit = Button(self.f, text="Quitter", command=self.destroy)
-        self.quit.grid(row=20, column=4, pady=5, padx=5)
+        self.quit.grid(row=20, column=10, pady=5, padx=5)
         self.next = Button(self.f, text="Suivant", command=None)
-        self.next.grid(row=20, column=3, pady=5, padx=1)
+        self.next.grid(row=20, column=9, pady=5, padx=1)
 
     def tool(self):
         """ for add a tool. """
-        pass
+
+        self.tool_b.config(bg="LightBlue")
+
+        Label(self.lf, text="Nom : ", width=10).grid(row=1, column=1, padx=5, pady=5)
+        self.name_e = Entry(self.lf, width=10)
+        self.name_e.grid(row=1, column=2, padx=5, pady=5)
+
+        Label(self.lf, text="Accesoire : ", width=10).grid(row=3, column=1, padx=5, pady=5)
+        self.attachmnent_e = Entry(self.lf, width=10)
+        self.attachmnent_e.grid(row=3, column=2, padx=5, pady=5)
+
 
     def spin(self):
         """ for add a spinner. """
