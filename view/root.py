@@ -65,6 +65,7 @@ class OverView(Tk):
 
     def __init__(self):
         Tk.__init__(self)
+        self.machine = "MX20"
         self.overlay()
 
     def overlay(self):
@@ -73,7 +74,7 @@ class OverView(Tk):
 
         def add():
 
-            path = popUp.Add_slide()
+            path = popUp.Add_slide(self.machine)
             path.mainloop()
 
         # width
