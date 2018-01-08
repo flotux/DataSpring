@@ -175,7 +175,7 @@ class NewRegulationViewer(Tk):
         while ind < self.listMachine.size():
             self.listMachine.itemconfig(ind, bg="White")
             ind += 1
-            
+
         i=self.listMachine.curselection()
         self.listMachine.itemconfig(i[0], bg="LightBlue")
         self.machine = utils.machlib.MODEL_LIST[i[0]]
@@ -196,34 +196,68 @@ class Add_slide(Tk):
         self.resizable(False, False)
         self.machine = machine
 
-        self.f = Frame(self, width=400, height=300)
-        self.f.pack()
+        self.f1 = Frame(self)
+        self.f1.grid(row=1, column=1, padx=70, pady=10)
+        self.tool_b = Button(self.f1, text="Outil", command=self.tool, width=10)
+        self.tool_b.grid(row=1, column=1, pady=10)
+        self.spin_b = Button(self.f1, text="Tournette", command=self.spin, width=10)
+        self.spin_b.grid(row=1, column=2, pady=10)
 
-        self.tool_b = Button(self.f, text="Outil", command=self.tool, width=10)
-        self.tool_b.grid(row=1, column=2, pady=10)
-        self.spin_b = Button(self.f, text="Tournette", command=self.spin, width=10)
-        self.spin_b.grid(row=1, column=3, pady=10)
+        self.f2 = Frame(self)
+        self.f2.grid(row=2, column=1)
+        self.lf = LabelFrame(self.f2, text="Informations", width=120, height=100)
+        self.lf.pack()
 
-        self.lf = LabelFrame(self.f, text="Informations", width=400, height=200)
-        self.lf.grid(row=2, column=1, padx=10, pady=10, columnspan=10)
+        self.f3 = Frame(self)
+        self.f3.grid(row=3, column=1)
+        self.quit = Button(self.f3, text="Quitter", command=self.destroy)
+        self.quit.grid(row=1, column=2, padx=10, pady=5)
 
-        self.quit = Button(self.f, text="Quitter", command=self.destroy)
-        self.quit.grid(row=20, column=10, pady=5, padx=5)
-        self.next = Button(self.f, text="Suivant", command=None)
-        self.next.grid(row=20, column=9, pady=5, padx=1)
 
     def tool(self):
         """ for add a tool. """
 
+        def add_sta():
+            self.sta.config(bg="LightBlue")
+            self.stu.config(bg="Grey")
+            self.sc.config(bg="Grey")
+
+        def add_stu():
+            self.stu.config(bg="LightBlue")
+            self.sta.config(bg="Grey")
+            self.sc.config(bg="Grey")
+
+
+        def add_sc():
+            self.sc.config(bg="LightBlue")
+            self.sta.config(bg="Grey")
+            self.stu.config(bg="Grey")
+
+
         self.tool_b.config(bg="LightBlue")
 
-        Label(self.lf, text="Nom : ", width=10).grid(row=1, column=1, padx=5, pady=5)
-        self.name_e = Entry(self.lf, width=10)
-        self.name_e.grid(row=1, column=2, padx=5, pady=5)
+        self.sta = Button(self.lf, text="STA", command=add_sta, width=8)
+        self.sta.grid(row=0, column=1, padx=10, pady=10)
+        self.stu = Button(self.lf, text="STU", command=add_stu, width=8)
+        self.stu.grid(row=0, column=2, padx=10, pady=10)
+        self.sc = Button(self.lf, text="SC", command=add_sc, width=8)
+        self.sc.grid(row=0, column=3, padx=10, pady=10)
 
-        Label(self.lf, text="Accesoire : ", width=10).grid(row=3, column=1, padx=5, pady=5)
-        self.attachmnent_e = Entry(self.lf, width=10)
-        self.attachmnent_e.grid(row=3, column=2, padx=5, pady=5)
+        Label(self.lf, text="Nom : ", width=10).grid(row=1, column=1, padx=10, pady=5)
+        self.name_e = Entry(self.lf, width=20)
+        self.name_e.grid(row=1, column=2, padx=10, pady=5, columnspan=2)
+
+        Label(self.lf, text="Accesoire : ", width=10).grid(row=3, column=1, padx=10, pady=5)
+        self.attachmnent_e = Entry(self.lf, width=20)
+        self.attachmnent_e.grid(row=3, column=2, padx=10, pady=5, columnspan=2)
+
+        Label(self.lf, text="Note : ", width=10).grid(row=10, column=2, padx=10, pady=5)
+        self.note = Entry(self.lf)
+        self.note.grid(row=11, column=2, padx=10, pady=5)
+
+        self.next = Button(self.f3, text="Suivant", command=None)
+        self.next.grid(row=1, column=1, padx=10, pady=5)
+
 
 
     def spin(self):
