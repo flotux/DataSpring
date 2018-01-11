@@ -212,26 +212,29 @@ class Add_slide(Tk):
         # if the machine can have additional motor, he go here.
         self.motor = StringVar()
         self.motor.set("None")
+        # the scale of the spin support.
+        self.spin_scale = StringVar()
+        self.spin_scale.set("None")
 
         # the first frame of the widget, allows to select a tool or a
         # spinner, he configure the second frame by the choice.
         self.f1 = Frame(self)
         self.f1.grid(row=1, column=1, padx=70, pady=10)
-        self.tool_b = Button(self.f1, text="Outil", command=self.tool, width=10)
+        self.tool_b = Button(self.f1, text="Outil", \
+                             command=self.tool, width=10)
         self.tool_b.grid(row=1, column=1, pady=10)
-        self.spin_b = Button(self.f1, text="Tournette", command=self.spin, width=10)
+        self.spin_b = Button(self.f1, text="Tournette", \
+                             command=self.spin, width=10)
         self.spin_b.grid(row=1, column=2, pady=10)
         # the second frame, allows to enter information about the slide added.
         self.f2 = Frame(self)
         self.f2.grid(row=2, column=1)
-        self.lf = LabelFrame(self.f2, text="Informations", width=160, height=120)
-        self.lf.pack()
         # the last frame, quit and ok button.
         self.f3 = Frame(self)
         self.f3.grid(row=3, column=1)
         self.quit = Button(self.f3, text="Quitter", command=self.destroy)
         self.quit.grid(row=1, column=2, padx=10, pady=5)
-        
+
         # by default the tool option are launch.
         self.tool()
 
@@ -244,10 +247,11 @@ class Add_slide(Tk):
         self.f2.destroy()
         self.f2 = Frame(self)
         self.f2.grid(row=2, column=1)
-        self.lf = LabelFrame(self.f2, text="Informations", width=120, height=100)
+        self.lf = LabelFrame(self.f2, text="Informations", \
+                             width=120, height=100)
         self.lf.pack()
 
-        # Creation of the radioGroup sup_rg for the selection of the support.
+        # radioGroupfor selection of the support.
         sup_rg = Frame(self.lf)
         sup_rg.grid(row=0, column=1, padx=10, pady=15, columnspan=5)
         self.sta = Radiobutton(sup_rg, text="STA", indicatoron=0, \
@@ -269,31 +273,35 @@ class Add_slide(Tk):
                                    width=8, selectcolor="LightBlue")
             self.stb.grid(row=0, column=4, padx=10, pady=10)
 
-        Label(self.lf, text="Nom : ", width=10).grid(row=1, column=1, padx=10, pady=5)
+        Label(self.lf, text="Nom : ", width=10)\
+        .grid(row=1, column=1, padx=10, pady=5)
         self.name_e = Entry(self.lf, width=20)
         self.name_e.grid(row=1, column=2, padx=10, pady=5, columnspan=3)
 
-        Label(self.lf, text="Accesoire : ", width=10).grid(row=3, column=1, padx=10, pady=5)
+        Label(self.lf, text="Accesoire : ", width=10)\
+        .grid(row=3, column=1, padx=10, pady=5)
         self.attachmnent_e = Entry(self.lf, width=20)
-        self.attachmnent_e.grid(row=3, column=2, padx=10, pady=5, columnspan=3)
+        self.attachmnent_e.grid(row=3, column=2, padx=10, \
+                                pady=5, columnspan=3)
 
         if self.machine in utils.machlib.MOTOR_CAM_MACHINE:
 
-            Label(self.lf, text="Moteur : ", width=10).grid(row=4, column=1, padx=10, pady=5)
+            Label(self.lf, text="Moteur : ", width=10)\
+            .grid(row=4, column=1, padx=10, pady=5)
             motor_rg = Frame(self.lf)
             motor_rg.grid(row=4, column=2, padx=10, pady=5, columnspan=3)
             self.x_motor = Radiobutton(motor_rg, text="X", variable=self.motor, \
-                                       value="x")
-            self.x_motor.grid(row=0, column=1, padx=0, pady=5)
+                                       value="x", selectcolor="LightBlue", \
+                                       indicatoron=0, width=4)
+            self.x_motor.grid(row=0, column=1, padx=4, pady=5)
 
-            self.y_motor = Radiobutton(motor_rg, text="Y", variable=self.motor, \
-                                       value="y")
-            self.y_motor.grid(row=0, column=2, padx=0, pady=5)
-            self.none_motor = Radiobutton(motor_rg, text="aucun", variable=self.motor, \
-                                       value="None")
-            self.none_motor.grid(row=0, column=3, padx=0, pady=5)
+            self.y_motor = Radiobutton(motor_rg, text="Y", \
+                                       variable=self.motor, value="y", \
+                                       indicatoron=0, selectcolor="LightBlue", width=4)
+            self.y_motor.grid(row=0, column=2, padx=4, pady=5)
 
-        Label(self.lf, text="Note : ", width=10).grid(row=10, column=1, padx=10, pady=5)
+        Label(self.lf, text="Note : ", width=10).grid(row=10, column=1, \
+                                                      padx=10, pady=5)
         self.note = Entry(self.lf)
         self.note.grid(row=10, column=2, padx=10, pady=5, columnspan=3)
 
@@ -309,20 +317,41 @@ class Add_slide(Tk):
         self.f2.destroy()
         self.f2 = Frame(self)
         self.f2.grid(row=2, column=1)
-        self.lf = LabelFrame(self.f2, text="Informations", width=120, height=100)
-        self.lf.pack()
-
+        self.lf = LabelFrame(self.f2, text="Informations", width=120, \
+                             height=100)
+        self.lf.grid(row=1, column=1, padx=10, pady=10, columnspan=4)
+        # radiogroup for selection of the support.
         radiogroup = Frame(self.lf)
         radiogroup.grid(row=0, column=1, padx=10, pady=15, columnspan=5)
         self.sp = Radiobutton(radiogroup, text="SP", indicatoron=0, \
                                variable=self.sup, value="SP", \
                                width=8, selectcolor="LightBlue")
         self.sp.grid(row=0, column=1, padx=10, pady=10)
+        # if the machine is a camme machine,
+        # the SPS support is available.
         if self.machine in utils.machlib.CAM_MACHINE:
             self.sps = Radiobutton(radiogroup, text="SPS", indicatoron=0, \
                                    variable=self.sup, value="SPS", \
                                    width=8, selectcolor="LightBlue")
             self.sps.grid(row=0, column=2, padx=10, pady=10)
+        else:
+            pass
+        # name of the spin. (entry)
+
+        # motors used. (radiobutton)
+
+        # scale for selection of the spin support scale.
+        Label(self.lf, text="Echelle : ", \
+              width=10).grid(row=3, column=1, padx=10, pady=5)
+        self.scale_s = Spinbox(self.lf, from_=0, to=20, width=8,\
+                                 increment=1, wrap=True, \
+                                 command=None)
+        self.scale_s.grid(row=3, column=2, padx=10, pady=5)
+
+        Label(self.lf, text="Note : ", width=10).grid(row=10, column=1, \
+                                                      padx=10, pady=5)
+        self.note = Entry(self.lf)
+        self.note.grid(row=10, column=2, padx=10, pady=5, columnspan=3)
 
 class EntryConf(Tk):
     """ Configure Entry. """
