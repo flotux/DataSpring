@@ -25,6 +25,7 @@ MODEL_LIST = (MX20, MCS20, AX20, MCS15G, SX15, MX10)
 FULL_MOTOR_MACHINE = (MX20.get("name"), MX10.get("name"))
 CAM_MACHINE = (MCS20.get("name"), AX20.get("name"), \
                MCS15G.get("name"), SX15.get("name"))
+MOTOR_CAM_MACHINE = (MCS20.get("name"), AX20.get("name"))
 
 # Support
 STA = "STA"
