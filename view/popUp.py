@@ -9,6 +9,8 @@
 
     Contain the pop up pages.
 
+        -- NewRegulationViewer -- create new regulation viewer.
+        -- Add_slide -- add a slide in overlay.
         -- LoadPage -- Find and load programmes.
         -- NewPage -- Create a new programme.
         -- EntryConf -- Configure Entry.
@@ -39,7 +41,8 @@ class NewRegulationViewer(Tk):
         Tk.__init__(self)
         self.title(NEW_REGULATION)
         self.sep = ("_" * 80)
-
+        # the windows is diviser by frame, any frame have a function,
+        # all functions are launch at the degining.
         self.identity()
         self.machine()
         self.wire()
@@ -64,7 +67,8 @@ class NewRegulationViewer(Tk):
         self.customer.grid(row=0, column=4)
 
     def machine(self):
-        """ A frame for selected the machine.
+        """ A frame for selected the machine,
+            according the MODEL_list in utils/machlib.
             """
 
         self.fm = LabelFrame(self, text=MACHINE_SELECTOR_LABEL)
@@ -73,12 +77,13 @@ class NewRegulationViewer(Tk):
         self.listMachine = Listbox(self.fm, height=7, width=16)
         for ind, elt in enumerate(utils.machlib.MODEL_LIST):
             self.listMachine.insert(ind, elt.get("name"))
+        # launch the machine_select function when a machine is select.
         self.listMachine.bind('<ButtonRelease-1>',self.machine_select)
         self.listMachine.pack(padx=10, pady=5)
 
     def wire(self):
         """ A frame for enter the diameter, references and
-            material of the wire.
+            type material of the wire.
             """
 
         self.fw = LabelFrame(self, text=WIRE_DIAMETER_LABEL)
@@ -162,22 +167,22 @@ class NewRegulationViewer(Tk):
         self.tol_e.grid(row=4, column=2)
         Label(self.fs, text="mm").grid(row=4, column=3)
 
-    def tools(self):
-        pass
-
     def machine_select(self, evt):
-        """ Whrite the machine selected on <listMachine> to
-            <machine>.
-            Configure the maximum wire diameter for <scaleWire> with
-            the machine capacity. """
-
+        """ executed when a machine is selected.
+            change the maximum size of the wire according The
+            machine selected.
+            """
+        # this block set all element in the listbox in white background,
+        # for more lisibiliter.
         ind = 0
         while ind < self.listMachine.size():
             self.listMachine.itemconfig(ind, bg="White")
             ind += 1
-
+        # set the current selection in LightBlue background.
         i=self.listMachine.curselection()
         self.listMachine.itemconfig(i[0], bg="LightBlue")
+        # according the capacity of the machine selected, change the wire
+        # maximum size can be select.
         self.machine = utils.machlib.MODEL_LIST[i[0]]
         self.scaleWire.config(to=self.machine.get("capacity"))
 
@@ -188,33 +193,47 @@ class NewRegulationViewer(Tk):
 
 class Add_slide(Tk):
     """ Add a slide in overlay.
+        Create a widget to enter many information :
+            - The type of the module
+            - the support
+            - the name
+            - the accessory
+            - the motor (according the type of the machine)
+            - note
         """
 
     def __init__(self, machine):
 
         Tk.__init__(self)
-        self.resizable(False, False)
+        # The machine used in the current regulation.
         self.machine = machine
+        # the support used.
         self.sup = StringVar()
+        # if the machine can have additional motor, he go here.
+        self.motor = StringVar()
+        self.motor.set("None")
 
-
+        # the first frame of the widget, allows to select a tool or a
+        # spinner, he configure the second frame by the choice.
         self.f1 = Frame(self)
         self.f1.grid(row=1, column=1, padx=70, pady=10)
         self.tool_b = Button(self.f1, text="Outil", command=self.tool, width=10)
         self.tool_b.grid(row=1, column=1, pady=10)
         self.spin_b = Button(self.f1, text="Tournette", command=self.spin, width=10)
         self.spin_b.grid(row=1, column=2, pady=10)
-
+        # the second frame, allows to enter information about the slide added.
         self.f2 = Frame(self)
         self.f2.grid(row=2, column=1)
-        self.lf = LabelFrame(self.f2, text="Informations", width=120, height=100)
+        self.lf = LabelFrame(self.f2, text="Informations", width=160, height=120)
         self.lf.pack()
-
+        # the last frame, quit and ok button.
         self.f3 = Frame(self)
         self.f3.grid(row=3, column=1)
         self.quit = Button(self.f3, text="Quitter", command=self.destroy)
         self.quit.grid(row=1, column=2, padx=10, pady=5)
-
+        
+        # by default the tool option are launch.
+        self.tool()
 
     def tool(self):
         """ for add a tool. """
@@ -228,38 +247,55 @@ class Add_slide(Tk):
         self.lf = LabelFrame(self.f2, text="Informations", width=120, height=100)
         self.lf.pack()
 
-        radiogroup = Frame(self.lf)
-        radiogroup.grid(row=0, column=1, padx=10, pady=15, columnspan=5)
-        self.sta = Radiobutton(radiogroup, text="STA", indicatoron=0, \
+        # Creation of the radioGroup sup_rg for the selection of the support.
+        sup_rg = Frame(self.lf)
+        sup_rg.grid(row=0, column=1, padx=10, pady=15, columnspan=5)
+        self.sta = Radiobutton(sup_rg, text="STA", indicatoron=0, \
                                variable=self.sup, value="STA", \
                                width=8, selectcolor="LightBlue")
         self.sta.grid(row=0, column=1, padx=10, pady=10)
-        self.stu = Radiobutton(radiogroup, text="STU", indicatoron=0, \
+        self.stu = Radiobutton(sup_rg, text="STU", indicatoron=0, \
                                variable=self.sup, value="STU", \
                                width=8, selectcolor="LightBlue")
         self.stu.grid(row=0, column=2, padx=10, pady=10)
-        self.sc = Radiobutton(radiogroup, text="SC", indicatoron=0, \
+        self.sc = Radiobutton(sup_rg, text="SC", indicatoron=0, \
                               variable=self.sup, value="SC", \
                               width=8, selectcolor="LightBlue")
         self.sc.grid(row=0, column=3, padx=10, pady=10)
 
         if self.machine in utils.machlib.CAM_MACHINE:
-            self.stb = Radiobutton(radiogroup, text="STB", indicatoron=0, \
+            self.stb = Radiobutton(sup_rg, text="STB", indicatoron=0, \
                                    variable=self.sup, value="STB", \
                                    width=8, selectcolor="LightBlue")
             self.stb.grid(row=0, column=4, padx=10, pady=10)
 
         Label(self.lf, text="Nom : ", width=10).grid(row=1, column=1, padx=10, pady=5)
         self.name_e = Entry(self.lf, width=20)
-        self.name_e.grid(row=1, column=2, padx=10, pady=5, columnspan=2)
+        self.name_e.grid(row=1, column=2, padx=10, pady=5, columnspan=3)
 
         Label(self.lf, text="Accesoire : ", width=10).grid(row=3, column=1, padx=10, pady=5)
         self.attachmnent_e = Entry(self.lf, width=20)
-        self.attachmnent_e.grid(row=3, column=2, padx=10, pady=5, columnspan=2)
+        self.attachmnent_e.grid(row=3, column=2, padx=10, pady=5, columnspan=3)
 
-        Label(self.lf, text="Note : ", width=10).grid(row=10, column=2, padx=10, pady=5)
+        if self.machine in utils.machlib.MOTOR_CAM_MACHINE:
+
+            Label(self.lf, text="Moteur : ", width=10).grid(row=4, column=1, padx=10, pady=5)
+            motor_rg = Frame(self.lf)
+            motor_rg.grid(row=4, column=2, padx=10, pady=5, columnspan=3)
+            self.x_motor = Radiobutton(motor_rg, text="X", variable=self.motor, \
+                                       value="x")
+            self.x_motor.grid(row=0, column=1, padx=0, pady=5)
+
+            self.y_motor = Radiobutton(motor_rg, text="Y", variable=self.motor, \
+                                       value="y")
+            self.y_motor.grid(row=0, column=2, padx=0, pady=5)
+            self.none_motor = Radiobutton(motor_rg, text="aucun", variable=self.motor, \
+                                       value="None")
+            self.none_motor.grid(row=0, column=3, padx=0, pady=5)
+
+        Label(self.lf, text="Note : ", width=10).grid(row=10, column=1, padx=10, pady=5)
         self.note = Entry(self.lf)
-        self.note.grid(row=11, column=2, padx=10, pady=5)
+        self.note.grid(row=10, column=2, padx=10, pady=5, columnspan=3)
 
         self.next = Button(self.f3, text="Suivant", command=None)
         self.next.grid(row=1, column=1, padx=10, pady=5)
