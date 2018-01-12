@@ -336,9 +336,35 @@ class Add_slide(Tk):
             self.sps.grid(row=0, column=2, padx=10, pady=10)
         else:
             pass
-        # name of the spin. (entry)
 
-        # motors used. (radiobutton)
+        # name of the spin.
+        Label(self.lf, text="Nom : ", width=10)\
+        .grid(row=1, column=1, padx=10, pady=5)
+        self.name_e = Entry(self.lf, width=20)
+        self.name_e.grid(row=1, column=2, padx=10, pady=5, columnspan=3)
+
+        # motors used.
+        Label(self.lf, text="Moteur : ", width=10)\
+        .grid(row=2, column=1, padx=10, pady=5)
+        motor_rg = Frame(self.lf)
+        motor_rg.grid(row=2, column=2, padx=10, pady=5, columnspan=3)
+        self.spin_motor_1 = Radiobutton(motor_rg, text="P", variable=self.motor, \
+                                   value="p", selectcolor="LightBlue", \
+                                   indicatoron=0, width=4)
+        self.spin_motor_1.grid(row=0, column=1, padx=4, pady=5)
+
+        self.spin_motor_2 = Radiobutton(motor_rg, text="Q", \
+                                   variable=self.motor, value="q", \
+                                   indicatoron=0, selectcolor="LightBlue", width=4)
+        self.spin_motor_2.grid(row=0, column=2, padx=4, pady=5)
+
+        # if the machine is a MCS15-G, the spinner motor
+        # have a different name.
+        if self.machine is utils.machlib.MCS15G.get("name"):
+            self.spin_motor_1.config(text="Y", value="y")
+            self.spin_motor_2.config(text="X", value="x")
+        else:
+            pass
 
         # scale for selection of the spin support scale.
         Label(self.lf, text="Echelle : ", \
@@ -346,7 +372,7 @@ class Add_slide(Tk):
         self.scale_s = Spinbox(self.lf, from_=0, to=20, width=8,\
                                  increment=1, wrap=True, \
                                  command=None)
-        self.scale_s.grid(row=3, column=2, padx=10, pady=5)
+        self.scale_s.grid(row=3, column=2, padx=10, pady=5, columnspan=3)
 
         Label(self.lf, text="Note : ", width=10).grid(row=10, column=1, \
                                                       padx=10, pady=5)
