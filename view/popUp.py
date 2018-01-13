@@ -23,10 +23,31 @@
 NEW_REGULATION = "Nouvelle fiche "
 MACHINE_SELECTOR_LABEL = "Machine "
 WIRE_DIAMETER_LABEL = "Fil "
+# text on interface
+QUIT = "Quitter "
+NEXT = "Suivant "
+LB_COLOR = "DodgerBlue4"
+REF_PROD = "Reference piece"
+CUSTOMER = "Client"
+DIAM = "Diametre"
+EXT_DIAM = "Diametre exterieur"
+NB = "Nombre de spire"
+TOLERATION = "Tolerance +/-"
+REF = "Reference"
+NAME = "Nom"
+RIGHT = "Droite"
+LEFT = "Gauche"
+STEEL = "Acier"
+INOX = "Inox"
+MATERIAL = "Matier"
+ACCESSORY = "Accesoire"
+NOTE = "Note"
+MOTOR = "Motor"
 
 from tkinter import *
 import utils.machlib
 import utils.sprlib
+import utils.tklib
 
 
 class LoadPage(Tk):
@@ -41,6 +62,14 @@ class NewRegulationViewer(Tk):
         Tk.__init__(self)
         self.title(NEW_REGULATION)
         self.sep = ("_" * 80)
+
+        ## the variable of the class. ##
+        self.id = StringVar()
+        self.customer = StringVar()
+        self.wire_ref = StringVar()
+        self.diam_ext = DoubleVar()
+        self.nb = DoubleVar()
+        self.tol = DoubleVar()
         # the windows is diviser by frame, any frame have a function,
         # all functions are launch at the degining.
         self.identity()
@@ -48,9 +77,9 @@ class NewRegulationViewer(Tk):
         self.wire()
         self.spring()
 
-        self.quit_bton = Button(self, text="Quitter", command=self.destroy)
+        self.quit_bton = Button(self, text=QUIT, command=self.destroy)
         self.quit_bton.grid(row=30, column=10, padx=2, pady=5)
-        self.next_bton = Button(self, text="Suivant")
+        self.next_bton = Button(self, text=NEXT)
         self.next_bton.grid(row=30, column=9, padx=2, pady=5)
 
     def identity(self):
@@ -58,16 +87,13 @@ class NewRegulationViewer(Tk):
             and the references.
             """
 
-        Label(self, text="Reference Piece : ").grid(row=0, column=1, \
-                                                    padx=10, pady=8)
-        self.id_e = Entry(self, width=20)
-        self.id_e.grid(row=0, column=2)
-        Label(self, text="Client : ").grid(row=0, column=3, padx=10, pady=8)
-        self.customer = Entry(self, width=10)
-        self.customer.grid(row=0, column=4)
+        # id entry, for self.id
+        self.id_entry = utils.tklib.label_entry(self, REF_PROD, self.id, 0, width=20)
+        # customer entry, for self.custommer
+        self.customer_entry = utils.tklib.label_entry(self, CUSTOMER, self.customer, 0, width=20, column=3)
 
     def machine(self):
-        """ A frame for selected the machine,
+        """ A frame for selected the mac"hine,
             according the MODEL_list in utils/machlib.
             """
 
@@ -94,28 +120,24 @@ class NewRegulationViewer(Tk):
                                  increment=0.1, wrap=True, \
                                  command=self.wire_select)
         self.scaleWire.grid(row=1, column=2)
-        Label(self.fw, text="Diametre : ").grid(row=1, column=1, \
-                                                padx=10, pady=8)
+        Label(self.fw, text=DIAM).grid(row=1, column=1, padx=10, pady=8)
         Label(self.fw, text="mm").grid(row=1, column=3)
         # Wire references
-        Label(self.fw, text="Reference : ").grid(row=2, column=1, \
-                                                 padx=10, pady=8)
-        self.wire_ref_e = Entry(self.fw, width=10)
-        self.wire_ref_e.grid(row=2, column=2)
-        # Wire material
+        self.wire_ref_entry = utils.tklib.label_entry(self.fw, REF, self.wire_ref, 2)
+
         self.material = StringVar()
         self.material.set("Acier")
-        Label(self.fw, text="Matiere : ").grid(row=3, column=1, padx=10, pady=8)
+        Label(self.fw, text=MATERIAL).grid(row=3, column=1, padx=10, pady=8)
         self.radiogroup_mat = Frame(self.fw)
         self.radiogroup_mat.grid(row=3, column=2)
-        self.steel = Radiobutton(self.radiogroup_mat, text="Acier", indicatoron=0, \
+        self.steel = Radiobutton(self.radiogroup_mat, text=STEEL, indicatoron=0, \
                                  variable=self.material, value="steel", \
-                                 width=4, selectcolor="LightBlue")
+                                 width=4, selectcolor=LB_COLOR)
         self.steel.grid(row=1, column=1)
         self.steel.deselect()
-        self.inox = Radiobutton(self.radiogroup_mat, text="Inox", indicatoron=0, \
+        self.inox = Radiobutton(self.radiogroup_mat, text=INOX, indicatoron=0, \
                                 variable=self.material, value="inox", \
-                                width=4, selectcolor="LightBlue")
+                                width=4, selectcolor=LB_COLOR)
         self.inox.grid(row=1, column=2)
         self.inox.deselect()
 
@@ -132,39 +154,27 @@ class NewRegulationViewer(Tk):
                                                           padx=5, pady=8)
         self.radiogroup_dir = Frame(self.fs)
         self.radiogroup_dir.grid(row=1, column=2)
-        self.right = Radiobutton(self.radiogroup_dir, text="Droite", indicatoron=0, \
+        self.right = Radiobutton(self.radiogroup_dir, text=RIGHT, indicatoron=0, \
                                  variable=self.dir, value="right", \
-                                 width=8, selectcolor="LightBlue")
+                                 width=8, selectcolor=LB_COLOR)
         self.right.grid(row=1, column=2)
         self.right.deselect()
-        self.left = Radiobutton(self.radiogroup_dir, text="Gauche", indicatoron=0, \
+        self.left = Radiobutton(self.radiogroup_dir, text=LEFT, indicatoron=0, \
                                 variable=self.dir, value="left", \
-                                width=8, selectcolor="LightBlue")
+                                width=8, selectcolor=LB_COLOR)
         self.left.grid(row=1, column=3)
         self.left.deselect()
 
-        Label(self.fs, text="Diametre exterieur : ").grid(row=2, column=1, \
-                                                         padx=5, pady=8)
-        self.diam = DoubleVar()
-        self.diam.set(10.00)
-        self.diam_e = Entry(self.fs, width=10)
-        self.diam_e.grid(row=2, column=2)
+        # diameter entry, for self.diam_ext
+        self.diam_entry = utils.tklib.label_entry(self.fs, EXT_DIAM, self.diam_ext, 2)
         Label(self.fs, text="mm").grid(row=2, column=3)
 
-        Label(self.fs, text="Nombre de spire : ").grid(row=3, column=1, \
-                                                         padx=5, pady=8)
-        self.nb = DoubleVar()
-        self.nb.set(10.00)
-        self.nb_e = Entry(self.fs, width=10)
-        self.nb_e.grid(row=3, column=2)
+        # number of coils entry, for self.nb.
+        self.nb_entry = utils.tklib.label_entry(self.fs, NB, self.nb, 3)
         Label(self.fs, text="spires").grid(row=3, column=3)
 
-        Label(self.fs, text="Tolerance diametre +/- : ").grid(row=4, column=1, \
-                                                         padx=5, pady=8)
-        self.tol = DoubleVar()
-        self.tol.set(0.10)
-        self.tol_e = Entry(self.fs, width=10)
-        self.tol_e.grid(row=4, column=2)
+        # diameter toleration entry, for self.tol.
+        self.diam_tol = utils.tklib.label_entry(self.fs, TOLERATION, self.tol, 4)
         Label(self.fs, text="mm").grid(row=4, column=3)
 
     def machine_select(self, evt):
@@ -180,7 +190,7 @@ class NewRegulationViewer(Tk):
             ind += 1
         # set the current selection in LightBlue background.
         i=self.listMachine.curselection()
-        self.listMachine.itemconfig(i[0], bg="LightBlue")
+        self.listMachine.itemconfig(i[0], bg=LB_COLOR)
         # according the capacity of the machine selected, change the wire
         # maximum size can be select.
         self.machine = utils.machlib.MODEL_LIST[i[0]]
@@ -210,12 +220,16 @@ class Add_slide(Tk):
         # the support used.
         self.sup = StringVar()
         # if the machine can have additional motor, he go here.
-        self.motor = StringVar()
-        self.motor.set("None")
+        self.spin_motor = StringVar()
         # the scale of the spin support.
         self.spin_scale = StringVar()
         self.spin_scale.set("None")
-
+        self.tool_name = StringVar()
+        self.accessory = StringVar()
+        self.tool_note = StringVar()
+        self.spin_name = StringVar()
+        self.spin_note = StringVar()
+        self.linear_motor = StringVar()
         # the first frame of the widget, allows to select a tool or a
         # spinner, he configure the second frame by the choice.
         self.f1 = Frame(self)
@@ -232,7 +246,7 @@ class Add_slide(Tk):
         # the last frame, quit and ok button.
         self.f3 = Frame(self)
         self.f3.grid(row=3, column=1)
-        self.quit = Button(self.f3, text="Quitter", command=self.destroy)
+        self.quit = Button(self.f3, text=QUIT, command=self.destroy)
         self.quit.grid(row=1, column=2, padx=10, pady=5)
 
         # by default the tool option are launch.
@@ -241,7 +255,7 @@ class Add_slide(Tk):
     def tool(self):
         """ for add a tool. """
 
-        self.tool_b.config(bg="LightBlue")
+        self.tool_b.config(bg=LB_COLOR)
         self.spin_b.config(bg="LightGrey")
 
         self.f2.destroy()
@@ -254,64 +268,38 @@ class Add_slide(Tk):
         # radioGroupfor selection of the support.
         sup_rg = Frame(self.lf)
         sup_rg.grid(row=0, column=1, padx=10, pady=15, columnspan=5)
-        self.sta = Radiobutton(sup_rg, text="STA", indicatoron=0, \
-                               variable=self.sup, value="STA", \
-                               width=8, selectcolor="LightBlue")
-        self.sta.grid(row=0, column=1, padx=10, pady=10)
-        self.stu = Radiobutton(sup_rg, text="STU", indicatoron=0, \
-                               variable=self.sup, value="STU", \
-                               width=8, selectcolor="LightBlue")
-        self.stu.grid(row=0, column=2, padx=10, pady=10)
-        self.sc = Radiobutton(sup_rg, text="SC", indicatoron=0, \
-                              variable=self.sup, value="SC", \
-                              width=8, selectcolor="LightBlue")
-        self.sc.grid(row=0, column=3, padx=10, pady=10)
+
+        self.sta_button = utils.tklib.radiobutton(sup_rg, "STA", self.sup, "STA", indicatoron=0, column=1, color=LB_COLOR)
+        self.stu_button = utils.tklib.radiobutton(sup_rg, "STU", self.sup, "STU", indicatoron=0, column=2, color=LB_COLOR)
+        self.sc_button = utils.tklib.radiobutton(sup_rg, "SC", self.sup, "SC", indicatoron=0, column=3, color=LB_COLOR)
 
         if self.machine in utils.machlib.CAM_MACHINE:
-            self.stb = Radiobutton(sup_rg, text="STB", indicatoron=0, \
-                                   variable=self.sup, value="STB", \
-                                   width=8, selectcolor="LightBlue")
-            self.stb.grid(row=0, column=4, padx=10, pady=10)
+            self.stb_button = utils.tklib.radiobutton(sup_rg, "STB", self.sup, "STB", indicatoron=0, column=4, color=LB_COLOR)
 
-        Label(self.lf, text="Nom : ", width=10)\
-        .grid(row=1, column=1, padx=10, pady=5)
-        self.name_e = Entry(self.lf, width=20)
-        self.name_e.grid(row=1, column=2, padx=10, pady=5, columnspan=3)
+        self.tool_name_entry = utils.tklib.label_entry(self.lf, NAME, self.tool_name, 1, 20)
 
-        Label(self.lf, text="Accesoire : ", width=10)\
-        .grid(row=3, column=1, padx=10, pady=5)
-        self.attachmnent_e = Entry(self.lf, width=20)
-        self.attachmnent_e.grid(row=3, column=2, padx=10, \
-                                pady=5, columnspan=3)
+        self.accessory_entry = utils.tklib.label_entry(self.lf, ACCESSORY, self.accessory, 2, 20)
 
+        # if the machine have a linear motor
         if self.machine in utils.machlib.MOTOR_CAM_MACHINE:
 
-            Label(self.lf, text="Moteur : ", width=10)\
-            .grid(row=4, column=1, padx=10, pady=5)
-            motor_rg = Frame(self.lf)
-            motor_rg.grid(row=4, column=2, padx=10, pady=5, columnspan=3)
-            self.x_motor = Radiobutton(motor_rg, text="X", variable=self.motor, \
-                                       value="x", selectcolor="LightBlue", \
-                                       indicatoron=0, width=4)
-            self.x_motor.grid(row=0, column=1, padx=4, pady=5)
+            Label(self.lf, text=MOTOR, width=10).grid(row=5, column=1, padx=10, pady=5)
+            lmotor = Frame(self.lf)
+            lmotor.grid(row=5, column=2, padx=10, pady=5, columnspan=3)
 
-            self.y_motor = Radiobutton(motor_rg, text="Y", \
-                                       variable=self.motor, value="y", \
-                                       indicatoron=0, selectcolor="LightBlue", width=4)
-            self.y_motor.grid(row=0, column=2, padx=4, pady=5)
+            self.motor_x_button = utils.tklib.radiobutton(lmotor, "X", self.linear_motor, "X", indicatoron=0, column=1, color=LB_COLOR, width=5)
+            self.motor_y_button = utils.tklib.radiobutton(lmotor, "Y", self.linear_motor, "Y", indicatoron=0, column=2, color=LB_COLOR, width=5)
+            self.not_motor_button = utils.tklib.radiobutton(lmotor, " ", self.linear_motor, False, indicatoron=0, column=3, color=LB_COLOR, width=5)
 
-        Label(self.lf, text="Note : ", width=10).grid(row=10, column=1, \
-                                                      padx=10, pady=5)
-        self.note = Entry(self.lf)
-        self.note.grid(row=10, column=2, padx=10, pady=5, columnspan=3)
+        self.tool_note_entry = utils.tklib.label_entry(self.lf, NOTE, self.tool_note, 10, 20)
 
-        self.next = Button(self.f3, text="Suivant", command=None)
+        self.next = Button(self.f3, text="Ok", command=None)
         self.next.grid(row=1, column=1, padx=10, pady=5)
 
     def spin(self):
         """ for add a spinner. """
 
-        self.spin_b.config(bg="LightBlue")
+        self.spin_b.config(bg=LB_COLOR)
         self.tool_b.config(bg="LightGrey")
 
         self.f2.destroy()
@@ -323,46 +311,30 @@ class Add_slide(Tk):
         # radiogroup for selection of the support.
         radiogroup = Frame(self.lf)
         radiogroup.grid(row=0, column=1, padx=10, pady=15, columnspan=5)
-        self.sp = Radiobutton(radiogroup, text="SP", indicatoron=0, \
-                               variable=self.sup, value="SP", \
-                               width=8, selectcolor="LightBlue")
-        self.sp.grid(row=0, column=1, padx=10, pady=10)
-        # if the machine is a camme machine,
-        # the SPS support is available.
+
+        self.sp_button = utils.tklib.radiobutton(radiogroup, "SP", self.sup, "SP", indicatoron=0, column=1, color=LB_COLOR)
+
         if self.machine in utils.machlib.CAM_MACHINE:
-            self.sps = Radiobutton(radiogroup, text="SPS", indicatoron=0, \
-                                   variable=self.sup, value="SPS", \
-                                   width=8, selectcolor="LightBlue")
-            self.sps.grid(row=0, column=2, padx=10, pady=10)
-        else:
-            pass
+            self.sps_button = utils.tklib.radiobutton(radiogroup, "SPS", self.sup, "SPS", indicatoron=0, column=2, color=LB_COLOR)
 
         # name of the spin.
-        Label(self.lf, text="Nom : ", width=10)\
-        .grid(row=1, column=1, padx=10, pady=5)
-        self.name_e = Entry(self.lf, width=20)
-        self.name_e.grid(row=1, column=2, padx=10, pady=5, columnspan=3)
+        self.spin_name_entry = utils.tklib.label_entry(self.lf, NAME, self.spin_name, 1, 20)
 
         # motors used.
         Label(self.lf, text="Moteur : ", width=10)\
         .grid(row=2, column=1, padx=10, pady=5)
         motor_rg = Frame(self.lf)
         motor_rg.grid(row=2, column=2, padx=10, pady=5, columnspan=3)
-        self.spin_motor_1 = Radiobutton(motor_rg, text="P", variable=self.motor, \
-                                   value="p", selectcolor="LightBlue", \
-                                   indicatoron=0, width=4)
-        self.spin_motor_1.grid(row=0, column=1, padx=4, pady=5)
 
-        self.spin_motor_2 = Radiobutton(motor_rg, text="Q", \
-                                   variable=self.motor, value="q", \
-                                   indicatoron=0, selectcolor="LightBlue", width=4)
-        self.spin_motor_2.grid(row=0, column=2, padx=4, pady=5)
+        self.spin_motor1_button = utils.tklib.radiobutton(motor_rg, "P", self.spin_motor, "P", indicatoron=0, column=1, color=LB_COLOR, width=5)
+        self.spin_motor2_button = utils.tklib.radiobutton(motor_rg, "Q", self.spin_motor, "Q", indicatoron=0, column=2, color=LB_COLOR, width=5)
+        self.spin_motor0_button = utils.tklib.radiobutton(motor_rg, " ", self.spin_motor, False, indicatoron=0, column=3, color=LB_COLOR, width=5)
 
         # if the machine is a MCS15-G, the spinner motor
         # have a different name.
         if self.machine is utils.machlib.MCS15G.get("name"):
-            self.spin_motor_1.config(text="Y", value="y")
-            self.spin_motor_2.config(text="X", value="x")
+            self.spin_motor1_button.config(text="Y", value="Y")
+            self.spin_motor2_button.config(text="X", value="X")
         else:
             pass
 
@@ -374,10 +346,8 @@ class Add_slide(Tk):
                                  command=None)
         self.scale_s.grid(row=3, column=2, padx=10, pady=5, columnspan=3)
 
-        Label(self.lf, text="Note : ", width=10).grid(row=10, column=1, \
-                                                      padx=10, pady=5)
-        self.note = Entry(self.lf)
-        self.note.grid(row=10, column=2, padx=10, pady=5, columnspan=3)
+        self.spin_note_entry = utils.tklib.label_entry(self.lf, NOTE, self.spin_note, 10, 20)
+
 
 class EntryConf(Tk):
     """ Configure Entry. """
