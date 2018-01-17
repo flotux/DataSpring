@@ -119,7 +119,6 @@ class Add_slide(object):
             self.linear_motor_frame.grid(row=5, column=2, padx=10, pady=5, columnspan=3)
 
             self.motor_used_button = Checkbutton(self.linear_motor_frame, \
-                                                 variable=self.motor_used, \
                                                  command=self.motor_check, \
                                                  onvalue=1, offvalue=0)
             self.motor_used_button.grid(row=1, column=0)
@@ -194,14 +193,19 @@ class Add_slide(object):
             """
 
 
-        print (self.motor_used.get())
+        if self.motor_used.get() is 0:
+            self.motor_used.set(1)
+        else:
+            self.motor_used.set(0)
+
         if self.motor_used.get():
             self.motor_x_button.config(state="normal")
             self.motor_y_button.config(state="normal")
         else :
             self.motor_x_button.config(state="disabled")
-            self.motor_x_button.config(state="disabled")
-            self.linear_motor.set("None")
+            self.motor_x_button.deselect()
+            self.motor_y_button.config(state="disabled")
+            self.motor_y_button.deselect()
 
         self.motor_used_button.update()
 
