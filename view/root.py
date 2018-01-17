@@ -17,7 +17,7 @@ APP_NAME = "Data springs"
 
 from tkinter import *
 from tkinter.ttk import *
-from . import popUp
+from . import popUp, add_slide, new_regulation
 
 class Root(Tk):
     """ The menu at the start of the programme. """
@@ -52,8 +52,9 @@ class Root(Tk):
     def new_reg(self):
         """ Used too lauch a new regulation viewer """
 
-        self.path = popUp.NewRegulationViewer()
-        self.path.mainloop()
+        self.new_regulation_windows = Toplevel(self)
+        self.new_regulation_windows.transient(self)
+        windows = new_regulation.NewRegulation(self.new_regulation_windows)
 
     def launch_overview(self):
 
@@ -65,7 +66,7 @@ class OverView(Tk):
 
     def __init__(self):
         Tk.__init__(self)
-        self.machine = "MX20"
+        self.machine = "MCS20"
         self.overlay()
 
     def overlay(self):
@@ -81,15 +82,7 @@ class OverView(Tk):
         canh2 = canh/2
         bloch = 180
 
-        def add():
-            """ Adding a slide on layout,
-                start the Add_Slide class in popUp.py for
-                editing the configuration of the new slide.
-                """
 
-            # start the widget for configure the slide.
-            popUp.Add_slide(self.machine).mainloop()
-            # configure the frame for print the slide information.
 
         # the overlay is a canvas.
         self.can = Canvas(self, width=canw, height=canh)
@@ -106,36 +99,46 @@ class OverView(Tk):
         # is placed in every element for adding tool or spinner.
         self.bloc1 = LabelFrame(self, width=blocw, height=bloch)
         self.bloc1.grid(row=0, column=2, padx=10, pady=10)
-        self.add1 = Button(self.bloc1, text="AJOUTER", command=add)
+        self.add1 = Button(self.bloc1, text="AJOUTER", command=self.add_slide_in_overlay)
         self.add1.pack(padx=20, pady=40)
         self.bloc2 = LabelFrame(self, width=blocw, height=bloch)
         self.bloc2.grid(row=0, column=5, padx=10, pady=10)
-        self.add2 = Button(self.bloc2, text="AJOUTER", command=add)
+        self.add2 = Button(self.bloc2, text="AJOUTER", command=self.add_slide_in_overlay)
         self.add2.pack(padx=20, pady=40)
         self.bloc3 = LabelFrame(self, width=blocw, height=bloch)
         self.bloc3.grid(row=2, column=5, padx=10, pady=10)
-        self.add3 = Button(self.bloc3, text="AJOUTER", command=add)
+        self.add3 = Button(self.bloc3, text="AJOUTER", command=self.add_slide_in_overlay)
         self.add3.pack(padx=20, pady=40)
         self.bloc4 = LabelFrame(self, width=blocw, height=bloch)
         self.bloc4.grid(row=5, column=5, padx=10, pady=10)
-        self.add4 = Button(self.bloc4, text="AJOUTER", command=add)
+        self.add4 = Button(self.bloc4, text="AJOUTER", command=self.add_slide_in_overlay)
         self.add4.pack(padx=20, pady=40)
         self.bloc5 = LabelFrame(self, width=blocw, height=bloch)
         self.bloc5.grid(row=5, column=2, padx=10, pady=10)
-        self.add5 = Button(self.bloc5, text="AJOUTER", command=add)
+        self.add5 = Button(self.bloc5, text="AJOUTER", command=self.add_slide_in_overlay)
         self.add5.pack(padx=20, pady=40)
         self.bloc6 = LabelFrame(self, width=blocw, height=bloch)
         self.bloc6.grid(row=5, column=0, padx=10, pady=10)
-        self.add6 = Button(self.bloc6, text="AJOUTER", command=add)
+        self.add6 = Button(self.bloc6, text="AJOUTER", command=self.add_slide_in_overlay)
         self.add6.pack(padx=20, pady=40)
         self.bloc7 = LabelFrame(self, width=blocw, height=bloch)
         self.bloc7.grid(row=2, column=0, padx=10, pady=10)
-        self.add7 = Button(self.bloc7, text="AJOUTER", command=add)
+        self.add7 = Button(self.bloc7, text="AJOUTER", command=self.add_slide_in_overlay)
         self.add7.pack(padx=20, pady=40)
         self.bloc8 = LabelFrame(self, width=blocw, height=bloch)
         self.bloc8.grid(row=0, column=0, padx=10, pady=10)
-        self.add8 = Button(self.bloc8, text="AJOUTER", command=add)
+        self.add8 = Button(self.bloc8, text="AJOUTER", command=self.add_slide_in_overlay)
         self.add8.pack(padx=20, pady=40)
+
+    def add_slide_in_overlay(self):
+        """ Adding a slide on layout,
+            start the Add_Slide class in popUp.py for
+            editing the configuration of the new slide.
+            """
+
+        self.add_window = Toplevel(self)
+        window = add_slide.Add_slide(self.add_window, self.machine)
+        # configure the frame for print the slide information.
 
     def characteristic(self):
         pass
