@@ -26,11 +26,12 @@ NOTE = "Note"
 MOTOR = "Motor"
 #===============================================================================
 
-#==== Import ===================================================================
+#==== Imports ==================================================================
 from tkinter import *
 import utils.machlib
 import utils.sprlib
 import utils.tklib
+import utils.guilib
 #===============================================================================
 
 class NewRegulation(object):
@@ -131,6 +132,8 @@ class NewRegulation(object):
 
         self.dir = StringVar()
         self.dir.set("Right")
+
+        # sens of winding, for self.dir
         Label(self.fs, text="sens d'enroulement : ").grid(row=1, column=1, \
                                                           padx=5, pady=8)
         self.radiogroup_dir = Frame(self.fs)
@@ -172,10 +175,16 @@ class NewRegulation(object):
         # set the current selection in LightBlue background.
         i=self.listMachine.curselection()
         self.listMachine.itemconfig(i[0], bg=LB_COLOR)
+
         # according the capacity of the machine selected, change the wire
         # maximum size can be select.
         self.machine = utils.machlib.MODEL_LIST[i[0]]
         self.scaleWire.config(to=self.machine.get("capacity"))
+
+        # if the wire selected is too big for the machine, he is change
+        # too the machine capacity (like in the screen)
+        if self.wire.get() > self.machine.get("capacity"):
+            self.wire.set(self.machine.get("capacity"))
 
     def wire_select(self):
         """ Set self.wire with the scaleWire value. """

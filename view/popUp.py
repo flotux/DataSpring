@@ -19,7 +19,14 @@
         -- CalcSpin -- Calculate values for spinners.
         """
 
+#==== Imports ==================================================================
 from tkinter import *
+import utils.machlib
+import utils.sprlib
+import utils.tklib
+import utils.guilib
+#===============================================================================
+
 
 
 class EntryConf(Tk):

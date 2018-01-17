@@ -1,8 +1,22 @@
+#!/usr/bin/env python3
+# -*- coding: utf8 -*-
 
+# Author : florian Vitalli
+# Contact : flvitalli@gmail.com
+
+"""
+    add_slide.py
+
+        A toplevel windows of root for add a slide in overlay.
+        """
+
+#==== Imports ==================================================================
 from tkinter import *
 import utils.machlib
 import utils.sprlib
 import utils.tklib
+import utils.guilib
+#===============================================================================
 
 class Add_slide(object):
     """ Add a slide in overlay.
