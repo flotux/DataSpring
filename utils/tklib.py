@@ -60,7 +60,16 @@ def info_label(root, caption, var, unity, row, width=10, padx=16, pady=8, \
     var_label = tkinter.tk.Label(root, textvariable=var, width=width)
     var_label.grid(row=row, column=column+1, padx=padx, pady=pady)
 
-    tkinter.tk.Label(root, text=unity, width=width/2).grid(row=row, column=column+2, \
+    tkinter.Label(root, text=unity, width=width/2).grid(row=row, column=column+2, \
                                                            padx=padx, pady=pady)
 
     return var_label
+
+def overbutton(root, row, column, command, **options):
+
+    lbf = tkinter.LabelFrame(root, width=110, height=180)
+    lbf.grid(row=row, column=column, padx=10, pady=10)
+    button= tkinter.Button(lbf, text="AJOUTER", command=command)
+    button.pack(padx=20, pady=40)
+
+    return lbf, button
