@@ -18,20 +18,25 @@ def send():
     pass
 
 def format_to_float(var):
-    """ Fromat a StringVar to float """
+    """ Fromat a string to float.
+            var -- the string to convert
+        if the conversion is imposible, raise a ValueError.
+        """
 
-    target = float()
     try:
-        target = float(var)
+        float(var)
     except ValueError as e:
-        var = var.replace(",", ".")
-        target = float(var)
-    finally:
-        if type(target) is float:
-            return target
+        # if the string have a comma instead of a point.
+        if "," in var:
+            var = var.replace(",", ".")
+            return float(var)
         else:
-            pass
+            raise ValueError
+    else:
+        return float(var)
+
 
 if __name__ == '__main__':
-    float_var = format_to_float("bonjour")
-    print(float_var, type(float_var))
+    str_var = "12,6"
+    var = format_to_float(str_var)
+    print(var, type(var))
