@@ -73,3 +73,12 @@ def overbutton(root, row, column, command, **options):
     button.pack(padx=20, pady=40)
 
     return lbf, button
+
+def combo_radio(root, caption, row, column, command, elt):
+    """ Create a radiobutton group with a label and checkbutton
+        for disabled/enabled the radiogroup.
+            root -- the root
+            row -- the row
+            column -- the column
+            command -- the command associated too buttons
+        """
