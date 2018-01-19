@@ -60,6 +60,8 @@ class NewRegulation(object):
         self.quit_bton = Button(self.master, text=QUIT, command=self.master.destroy)
         self.quit_bton.grid(row=30, column=10, padx=2, pady=5)
         self.next_bton = Button(self.master, text=NEXT, command=self.next)
+        self.next_bton.bind('<Return>',self.next)
+
         self.next_bton.grid(row=30, column=9, padx=2, pady=5)
 
     def identity(self):
@@ -85,6 +87,7 @@ class NewRegulation(object):
             self.listMachine.insert(ind, elt.get("name"))
         # launch the machine_select function when a machine is select.
         self.listMachine.bind('<ButtonRelease-1>',self.machine_select)
+        self.listMachine.bind('<Return>',self.machine_select)
         self.listMachine.pack(padx=10, pady=5)
 
     def wire(self):
@@ -161,7 +164,7 @@ class NewRegulation(object):
         self.diam_tol = utils.tklib.label_entry(self.fs, TOLERATION, self.tol, 4)
         Label(self.fs, text="mm").grid(row=4, column=3)
 
-    def machine_select(self, evt):
+    def machine_select(self, *evt):
         """ executed when a machine is selected.
             change the maximum size of the wire according The
             machine selected.
@@ -186,12 +189,12 @@ class NewRegulation(object):
         if self.wire.get() > self.machine.get("capacity"):
             self.wire.set(self.machine.get("capacity"))
 
-    def wire_select(self):
+    def wire_select(self, *evt):
         """ Set self.wire with the scaleWire value. """
 
         self.wire.set(self.scaleWire.get())
 
-    def next(self):
+    def next(self, *evt):
         print (self.id.get(), self.customer.get(),\
                self.machine.get("name"), self.wire.get(),\
                self.wire_ref.get(), self.material.get())
