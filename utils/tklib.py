@@ -44,12 +44,13 @@ def radiobutton(root, caption, var, value, width=8, indicatoron=1, column=1, \
 
     return radiobutton
 
-def info_label(root, caption, var, unity, row, width=10, padx=16, pady=8, \
+def info_label(root, caption, var, row, unity="mm", width=20, padx=4, pady=8, \
                  column=1, **options):
     """ Creat a triple label wiget.
             1. caption - the description
             2. var - the contain
-            3. unity - the unity of the Contain
+            3. row - the row of the object
+            4. unity - the unity of the Contain (mm bye default)
 
         Return the contain label.
         """
@@ -57,11 +58,11 @@ def info_label(root, caption, var, unity, row, width=10, padx=16, pady=8, \
     caption += " : "
     tkinter.Label(root, text=caption, width=width).grid(row=row, column=column, \
                                            padx=padx, pady=pady)
-    var_label = tkinter.tk.Label(root, textvariable=var, width=width)
-    var_label.grid(row=row, column=column+1, padx=padx, pady=pady)
+    var_label = tkinter.Label(root, text=var, width=int(width/4))
+    var_label.grid(row=row, column=int(column+1), padx=padx, pady=pady)
 
-    tkinter.Label(root, text=unity, width=width/2).grid(row=row, column=column+2, \
-                                                           padx=padx, pady=pady)
+    tkinter.Label(root, text=unity, width=int(width/4))\
+    .grid(row=row, column=int(column+2), padx=0, pady=pady)
 
     return var_label
 
