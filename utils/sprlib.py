@@ -7,7 +7,7 @@
 """ sprlib
 
     A function library for geometric calculs on spring,
-    used by Spring class, she can be aslo use directly for direct calculs.
+    used by Spring class, it can be aslo used directly for calculs.
     """
 
 import math
@@ -26,7 +26,7 @@ __all__ = ["sensor_tol", "one_degree", "body_length", "body_weight",
 
 
 def sensor_tol(tol, nb):
-    """ Return the millimeter value to enter in the sensor.
+    """ Return in millimeter the value to enter in the sensor.
 
         tol -- body toleration
         nb -- number of coils """
@@ -35,7 +35,7 @@ def sensor_tol(tol, nb):
 
 
 def one_degree(wire, diam):
-    """ Return the millimeter value for having 1 degree.
+    """ Return in millimeter the value for have 1 degree.
 
         wire -- wire diameter
         diam -- body diameter """
@@ -67,7 +67,7 @@ def oob_diam(diam, material, diff=0.10):
 
         diam -- body diameter
         material -- material of spring
-        diff -- diameter move after treatment """
+        diff -- diameter movement after treatment """
 
     if material is STEEL:
         return diam + diff
