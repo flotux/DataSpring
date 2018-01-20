@@ -9,10 +9,9 @@ APP_NAME = "Data springs"
 """
     Root.py
 
-    A collection of the principal windows on the programme.
+    The main windows of the programme, contains several class.
 
-        -- StartMenu -- The menu at the start of the programme.
-        -- OverView -- The page how the principal informations have been print.
+        -- Overlay -- The page how the principal informations have been print.
         """
 
 #==== Imports ==================================================================
@@ -36,8 +35,10 @@ class Root(Tk):
     def __init__(self):
 
         Tk.__init__(self)
+
         self.title(APP_NAME)
-        self.configure(width=800, height=600)
+        self.geometry("800x600+300+0")
+        self.resizable(width=False,height=False)
 
         self.menuBar = Menu(self)
 
@@ -54,11 +55,10 @@ class Root(Tk):
         self.menuFile.add_command(label="Sauvegarder", command=None)
         self.menuFile.add_command(label="Sauvegarder sous...", command=None)
         self.menuFile.add_separator()
-        self.menuFile.add_command(label="Quiter", command=self.destroy)
+        self.menuFile.add_command(label="Quitter", command=self.destroy)
         self.menuBar.add_cascade(label="Fichier", menu=self.menuFile)
 
         self.config(menu=self.menuBar)
-
 
     def new_reg(self):
         """ Used too lauch a new regulation viewer """
@@ -69,38 +69,45 @@ class Root(Tk):
 
     def launch_overview(self):
 
-        self.path = OverView()
-        self.path.mainloop()
+        self.overlay = Overlay(self)
+        self.overlay.grid(row=1, column=1)
 
 
-class OverView(Tk):
+class Overlay(Frame):
+    """
+        The Classe Overlay is a visual representation of the machine overlay,
+        it's use too place the slides and add tools, spinners, linear motors,
+        cammes and commentary.
 
-    def __init__(self):
-        Tk.__init__(self)
+        in first, a canva is used to draw lines and circle
+        for a greate visibility.
+        8 blocs are place like the 8 slides of the machine, a button
+        on each bloc allows to add tool or spinner on it.
+        The spinner/tool added is written on the bloc.
+        """
+
+    def __init__(self, master):
+        Frame.__init__(self, master)
         self.machine = "MCS20"
-        self.overlay()
-
-    def overlay(self):
-        """ Overlay of the machine.
-            """
 
         # width, height of the canvas self.can
         canw, canh = 220, 220
         canw2, canh2 = canw/2, canh/2
 
-        # the overlay is a canvas.
+        # the overlay is an canvas.
         self.can = Canvas(self, width=canw, height=canh)
         self.can.grid(row=1, column=1, columnspan=3, rowspan=3)
 
-        # creation of line for better visibiliter.
+        # creation of lines and oval in the center of
+        # the canvas for a better visibility.
         self.can.create_line(canw2, 0, canw2, canh, width=1.4)
         self.can.create_line(0, canh2, canw, canh2, width=1.4)
         self.can.create_line(0, 0, canw, canh, width=1.4)
         self.can.create_line(canw, 0, 0, canh, width=1.4)
         self.can.create_oval(canw2-20, canh2-20, canw2+20, canh/2+20)
 
-        # the 8 machine slides is representing by a LabelFrame, a Button
-        # is placed in every element for adding tool or spinner.
+        # the 8 machine slides are represent by a LabelFrame, a Button
+        # is placed on each element for adding tool or spinner.
         self.bloc1, add1 = utils.tklib.overbutton(self, 0, 2, self.add_slide)
         self.bloc2, add2 = utils.tklib.overbutton(self, 0, 5, self.add_slide)
         self.bloc3, add3 = utils.tklib.overbutton(self, 2, 5, self.add_slide)
@@ -112,24 +119,22 @@ class OverView(Tk):
 
 
     def add_slide(self):
-        """ Adding a slide on layout,
-            start the Add_Slide class in popUp.py for
-            editing the configuration of the new slide.
+        """ For add a slide on the layout, just
+            launch the Add_slide class
             """
 
-        self.add_window = Toplevel(self)
+        self.add_window = Toplevel(self.master)
         window = view.add_slide.Add_slide(self.add_window, self.machine)
         # configure the frame for print the slide information.
 
-    def characteristic(self):
+class Geometry(Frame):
+    """ Print the information of the spring. """
+
+    def __init__(self, master):
+        Frame.__ init__(self, master)
         pass
 
-    def informations(self):
-        pass
+
 
     def entry(self):
         pass
-
-
-if __name__ == '__main__':
-    Root().mainloop()
