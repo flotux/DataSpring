@@ -9,9 +9,10 @@ APP_NAME = "Data springs"
 """
     Root.py
 
-    The main windows of the programme, contains several class.
+    The main windows of the programme, contains many class.
 
-        -- Overlay -- The page how the principal informations have been print.
+        -- Overlay
+        -- Geometry
         """
 
 #==== Imports ==================================================================
@@ -37,11 +38,11 @@ class Root(Tk):
         Tk.__init__(self)
 
         self.title(APP_NAME)
-        self.geometry("800x600+300+0")
+        self.geometry("1024x768+384+0")
         self.resizable(width=False,height=False)
 
+        # Creation of the menu
         self.menuBar = Menu(self)
-
         self.menuFile = Menu(self.menuBar, tearoff=0)
 
         self.menuNew = Menu(self.menuFile, tearoff=0)
@@ -70,9 +71,12 @@ class Root(Tk):
     def launch_overview(self):
 
         self.overlay = Overlay(self)
-        self.overlay.grid(row=1, column=1)
+        self.overlay.grid(row=1, column=1, rowspan=2, columnspan=2)
+        self.geometry = Geometry(self)
+        self.geometry.grid(row=1, column=0)
 
 
+#===============================================================================
 class Overlay(Frame):
     """
         The Classe Overlay is a visual representation of the machine overlay,
@@ -91,8 +95,8 @@ class Overlay(Frame):
         self.machine = "MCS20"
 
         # width, height of the canvas self.can
-        canw, canh = 220, 220
-        canw2, canh2 = canw/2, canh/2
+        canw = canh = 220
+        canw2 = canh2 = 110
 
         # the overlay is an canvas.
         self.can = Canvas(self, width=canw, height=canh)
@@ -127,14 +131,46 @@ class Overlay(Frame):
         window = view.add_slide.Add_slide(self.add_window, self.machine)
         # configure the frame for print the slide information.
 
-class Geometry(Frame):
+
+#===============================================================================
+class Geometry(LabelFrame):
     """ Print the information of the spring. """
 
     def __init__(self, master):
-        Frame.__ init__(self, master)
-        pass
+        LabelFrame.__init__(self, master, text="Information")
+
+        self.diam = utils.tklib.info_label(self, "Diametre exterieur", 12.0, 0)
+        self.tol = utils.tklib.info_label(self, "toleration", 0.1, 1)
+        self.nb = utils.tklib.info_label(self, "Nombre de spires", 5.5, 2)
+        self.de = utils.tklib.info_label(self, "Diametre exterieur", 12.0, 3)
+        self.dr = utils.tklib.info_label(self, "Diametre exterieur", 12.0, 4)
 
 
+#===============================================================================
+class CalculateValue(LabelFrame):
+    pass
 
-    def entry(self):
-        pass
+
+#===============================================================================
+class Sensors(LabelFrame):
+    pass
+
+
+#===============================================================================
+class Note(LabelFrame):
+    pass
+
+
+#===============================================================================
+class InputOutput(LabelFrame):
+    pass
+
+
+#===============================================================================
+class Counter(LabelFrame):
+    pass
+
+
+#===============================================================================
+class ProductionData(LabelFrame):
+    pass
