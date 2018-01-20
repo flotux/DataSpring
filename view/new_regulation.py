@@ -43,14 +43,14 @@ class NewRegulation(object):
         self.master.title(NEW_REGULATION)
         self.sep = ("_" * 80)
 
-        ## the variable of the class. ##
+        ## the variables of the class. ##
         self.id = StringVar()
         self.customer = StringVar()
         self.wire_ref = StringVar()
         self.diam_ext = StringVar()
         self.nb = StringVar()
         self.tol = StringVar()
-        # the windows is diviser by frame, any frame have a function,
+        # the windows is diviser by frame, several frame have a function,
         # all functions are launch at the degining.
         self.identity()
         self.machine()
@@ -59,8 +59,8 @@ class NewRegulation(object):
 
         self.quit_bton = Button(self.master, text=QUIT, command=self.master.destroy)
         self.quit_bton.grid(row=30, column=10, padx=2, pady=5)
-        self.next_bton = Button(self.master, text=NEXT, command=self.next)
-        self.next_bton.bind('<Return>',self.next)
+        self.next_bton = Button(self.master, text=NEXT, command=self.__repr__)
+        self.next_bton.bind('<Return>',self.__repr__)
 
         self.next_bton.grid(row=30, column=9, padx=2, pady=5)
 
@@ -194,7 +194,7 @@ class NewRegulation(object):
 
         self.wire.set(self.scaleWire.get())
 
-    def next(self, *evt):
+    def __repr__(self):
         print (self.id.get(), self.customer.get(),\
                self.machine.get("name"), self.wire.get(),\
                self.wire_ref.get(), self.material.get())
