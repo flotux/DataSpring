@@ -38,8 +38,8 @@ STS = "STS"
 SC = "SC"
 
 # table of support available.
-# Stocked on a tabe because the support are not available
-# for all machine.
+# Stocked on a tabe because all the supports
+# are not compatible on all machines
 SUPPORT_LIST = [STA, STB, STU, SP, SPS, ST, STS, SC]
 
 # Cammes
@@ -138,10 +138,10 @@ class CammeSlide(Slide):
 
     def __init__(self, position, cam=None, cam_pos=None, cam_sup=None):
         """
-            According to the type of machine, cammes slides are directly
+            According to the type of machine, a cammes slides are directly
             created and place without cammes, exepted the cut slide, whish as
             camme, camme angle and camme support by default.
-            to over, the informations about camme are optional, she can be
+            finally , the informations about camme are optional, she can be
             decide later.
 
             position -- position of the motor in the machine
@@ -207,8 +207,8 @@ class CammeSlide(Slide):
 
 
 class MotorSlide(Slide):
-    """ A slide controlled by motor.
-        According the type of the machine, motor slide are directly
+    """ A slide controlled by a motor.
+        According the type of the machine, motor slide can be directly
         created and places. A motor can be fixed on layout or removable
         """
 
@@ -227,7 +227,7 @@ class MotorSlide(Slide):
 
 
 class RotaryMotor(object):
-    """ A rotary motor modulee provided that position a spinner tool.
+    """ A rotary motor module provided that position a spinner tool.
         her name is her axes. It's a empty class """
 
     def __init__(self, scale=None):
@@ -244,7 +244,7 @@ class RotaryMotor(object):
 
 
 class Support(object):
-    """ A support modulee provided that position a tool.
+    """ A support module provided that position a tool.
         her name is her reference. It's a empty class """
 
     def __init__(self, name):
@@ -289,33 +289,3 @@ class Spin(Tools):
             name -- the name of the spin """
 
         Tools.__init__(self, name)
-
-
-# Error Class
-class MachlibError(Exception):
-    pass
-
-
-class MachineCapacityError(MachlibError, OverflowError):
-    """ The machine dosen't have the capacity to produce this
-        spring, the wire is too big. """
-    pass
-
-
-class IllegalSlideMoveError(MachlibError, AttributeError):
-    """ the slide cannot be move in her actual configuration. """
-    pass
-
-
-class IllegalElementAddError(MachlibError, AttributeError):
-    """ The element cannot be add. """
-    pass
-
-
-class IllegalElementRemoveError(MachlibError, AttributeError):
-    """ The element cannot be remove. """
-    pass
-
-
-class IllegalCammeSetError(MachlibError, AttributeError):
-    pass
