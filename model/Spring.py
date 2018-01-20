@@ -11,7 +11,7 @@
 
 class Spring(object):
 
-    def __init__(self, ind, wire, diam, diam_tol, nb,
+    def __init__(self, ref, customer, wire, diam, diam_tol, nb,
                  material, angl=0, angl_tol=0):
         """
             ind -- indice of the spring
@@ -23,10 +23,10 @@ class Spring(object):
             angl -OPTIONAL- angle of spring
             angl_tol -OPTIONAL- angle toleration """
 
-        self.ind = ind
+        self.ref = ref
+        self.customer = customer
         self.wire = wire
-        self.diam = diam
-        self.diam_tol = tol
+        self.diam, diam_tol = diam, diam_tol
         self.nb = nb
         self.machine = machine
         self.material = material
@@ -44,5 +44,11 @@ class Spring(object):
         self.body_weight = sprlib.body_weight(wire, nb)
         self.diam_oob = sprlib.oob_diam(diam, material)
 
-    def __str__(self):
+    def __repr__(self):
         pass
+
+    def __getattr__(self, attr):
+        return None
+
+    def __setattr__(self, attr, value):
+        object.__setattr__(self, attr, value)
