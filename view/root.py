@@ -19,19 +19,18 @@ APP_NAME = "Data springs"
 from tkinter import *
 from tkinter.ttk import *
 #==========================#
-import utils.machlib
-import utils.sprlib
-import utils.tklib
-import utils.guilib
+import controller.machlib
+import controller.sprlib
+import controller.form_check
 #==========================#
-import view.popUp
 import view.add_slide
 import view.new_regulation
+from view import tklib
 #===============================================================================
 
 
 class Root(Tk):
-    """ The menu at the start of the programme. """
+    """ The start menu of the programme. """
 
     def __init__(self):
 
@@ -39,7 +38,7 @@ class Root(Tk):
 
         self.title(APP_NAME)
         self.geometry("1024x768+384+0")
-        self.resizable(width=False,height=False)
+
 
         # Creation of the menu
         self.menuBar = Menu(self)
@@ -72,8 +71,18 @@ class Root(Tk):
 
         self.overlay = Overlay(self)
         self.overlay.grid(row=1, column=1, rowspan=2, columnspan=2)
+
         self.geometry = Geometry(self)
         self.geometry.grid(row=1, column=0)
+
+        #self.sensors = Sensors(self)
+        #self.sensors.grid(row=2, column=0)
+
+        #self.note = Note(self)
+        #self.note.grid(row=3, column=0)
+
+        #self.calculate_value = CalculateValue(self)
+        #self.calculate_value.grid(row=1, column=4)
 
 
 #===============================================================================
@@ -84,7 +93,7 @@ class Overlay(Frame):
         cammes and commentary.
 
         in first, a canva is used to draw lines and circle
-        for a greate visibility.
+        for the visibility.
         8 blocs are place like the 8 slides of the machine, a button
         on each bloc allows to add tool or spinner on it.
         The spinner/tool added is written on the bloc.
@@ -112,14 +121,14 @@ class Overlay(Frame):
 
         # the 8 machine slides are represent by a LabelFrame, a Button
         # is placed on each element for adding tool or spinner.
-        self.bloc1, add1 = utils.tklib.overbutton(self, 0, 2, self.add_slide)
-        self.bloc2, add2 = utils.tklib.overbutton(self, 0, 5, self.add_slide)
-        self.bloc3, add3 = utils.tklib.overbutton(self, 2, 5, self.add_slide)
-        self.bloc4, add4 = utils.tklib.overbutton(self, 5, 5, self.add_slide)
-        self.bloc5, add5 = utils.tklib.overbutton(self, 5, 2, self.add_slide)
-        self.bloc6, add6 = utils.tklib.overbutton(self, 5, 0, self.add_slide)
-        self.bloc7, add7 = utils.tklib.overbutton(self, 2, 0, self.add_slide)
-        self.bloc8, add8 = utils.tklib.overbutton(self, 0, 0, self.add_slide)
+        self.bloc1, add1 = tklib.overbutton(self, 0, 2, self.add_slide)
+        self.bloc2, add2 = tklib.overbutton(self, 0, 5, self.add_slide)
+        self.bloc3, add3 = tklib.overbutton(self, 2, 5, self.add_slide)
+        self.bloc4, add4 = tklib.overbutton(self, 5, 5, self.add_slide)
+        self.bloc5, add5 = tklib.overbutton(self, 5, 2, self.add_slide)
+        self.bloc6, add6 = tklib.overbutton(self, 5, 0, self.add_slide)
+        self.bloc7, add7 = tklib.overbutton(self, 2, 0, self.add_slide)
+        self.bloc8, add8 = tklib.overbutton(self, 0, 0, self.add_slide)
 
 
     def add_slide(self):
@@ -134,16 +143,17 @@ class Overlay(Frame):
 
 #===============================================================================
 class Geometry(LabelFrame):
-    """ Print the information of the spring. """
+    """ Print the information about the spring. """
 
     def __init__(self, master):
-        LabelFrame.__init__(self, master, text="Information")
 
-        self.diam = utils.tklib.info_label(self, "Diametre exterieur", 12.0, 0)
-        self.tol = utils.tklib.info_label(self, "toleration", 0.1, 1)
-        self.nb = utils.tklib.info_label(self, "Nombre de spires", 5.5, 2)
-        self.de = utils.tklib.info_label(self, "Diametre exterieur", 12.0, 3)
-        self.dr = utils.tklib.info_label(self, "Diametre exterieur", 12.0, 4)
+        LabelFrame.__init__(self, master, text="Informations")
+
+        self.wire = tklib.info_label(self, "Fil", 1.7, 0)
+        self.material = tklib.info_label(self, "Matiere", "INOX", 1, None)
+        self.diam = tklib.info_label(self, "Diametre exterieur", 12.0, 2)
+        self.tol = tklib.info_label(self, "toleration", 0.1, 3)
+        self.nb = tklib.info_label(self, "Nombre de spires", 5.5, 4, "spires" )
 
 
 #===============================================================================
