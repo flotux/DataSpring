@@ -12,10 +12,12 @@
 
 #==== Imports ==================================================================
 from tkinter import *
-import utils.machlib
-import utils.sprlib
-import utils.tklib
-import utils.guilib
+#=======================#
+import controller.machlib
+import controller.sprlib
+import controller.form_check
+#=======================#
+from view import tklib
 #===============================================================================
 
 class Add_slide(object):
@@ -94,23 +96,23 @@ class Add_slide(object):
         sup_rg = Frame(self.lf)
         sup_rg.grid(row=0, column=1, padx=10, pady=15, columnspan=5)
 
-        self.sta_button = utils.tklib.radiobutton(sup_rg, "STA", self.sup, \
+        self.sta_button = tklib.radiobutton(sup_rg, "STA", self.sup, \
                                                   "STA", indicatoron=0, column=1)
-        self.stu_button = utils.tklib.radiobutton(sup_rg, "STU", self.sup, \
+        self.stu_button = tklib.radiobutton(sup_rg, "STU", self.sup, \
                                                   "STU", indicatoron=0, column=2)
-        self.sc_button = utils.tklib.radiobutton(sup_rg, "SC", self.sup, \
+        self.sc_button = tklib.radiobutton(sup_rg, "SC", self.sup, \
                                                  "SC", indicatoron=0, column=3)
 
-        if self.machine in utils.machlib.CAM_MACHINE:
-            self.stb_button = utils.tklib.radiobutton(sup_rg, "STB", self.sup, \
+        if self.machine in controller.machlib.CAM_MACHINE:
+            self.stb_button = tklib.radiobutton(sup_rg, "STB", self.sup, \
                                                       "STB", indicatoron=0, column=4)
 
-        self.tool_name_entry = utils.tklib.label_entry(self.lf, "Nom", self.tool_name, 1, 20)
+        self.tool_name_entry = tklib.label_entry(self.lf, "Nom", self.tool_name, 1, 20)
 
-        self.accessory_entry = utils.tklib.label_entry(self.lf, "Accesoire", self.accessory, 2, 20)
+        self.accessory_entry = tklib.label_entry(self.lf, "Accesoire", self.accessory, 2, 20)
 
         # if the machine have a linear motor
-        if self.machine in utils.machlib.MOTOR_CAM_MACHINE:
+        if self.machine in controller.machlib.MOTOR_CAM_MACHINE:
 
 
             Label(self.lf, text="Moteur :", width=10).grid(row=5, column=1, padx=10, pady=5)
@@ -123,16 +125,16 @@ class Add_slide(object):
                                                  onvalue=1, offvalue=0)
             self.motor_used_button.grid(row=1, column=0)
 
-            self.motor_x_button = utils.tklib.radiobutton(self.linear_motor_frame, \
+            self.motor_x_button = tklib.radiobutton(self.linear_motor_frame, \
                                                           "X", self.linear_motor, \
                                                           "X", indicatoron=0, column=1, width=5)
             self.motor_x_button.config(state="disabled")
-            self.motor_y_button = utils.tklib.radiobutton(self.linear_motor_frame, \
+            self.motor_y_button = tklib.radiobutton(self.linear_motor_frame, \
                                                           "Y", self.linear_motor, \
                                                           "Y", indicatoron=0, column=2, width=5)
             self.motor_y_button.config(state="disabled")
 
-        self.tool_note_entry = utils.tklib.label_entry(self.lf, "Note", self.tool_note, 10, 20)
+        self.tool_note_entry = tklib.label_entry(self.lf, "Note", self.tool_note, 10, 20)
 
 
 
@@ -150,13 +152,13 @@ class Add_slide(object):
         radiogroup = Frame(self.lf)
         radiogroup.grid(row=0, column=1, padx=10, pady=15, columnspan=5)
 
-        self.sp_button = utils.tklib.radiobutton(radiogroup, "SP", self.sup, "SP", indicatoron=0, column=1)
+        self.sp_button = tklib.radiobutton(radiogroup, "SP", self.sup, "SP", indicatoron=0, column=1)
 
-        if self.machine in utils.machlib.CAM_MACHINE:
-            self.sps_button = utils.tklib.radiobutton(radiogroup, "SPS", self.sup, "SPS", indicatoron=0, column=2)
+        if self.machine in controller.machlib.CAM_MACHINE:
+            self.sps_button = tklib.radiobutton(radiogroup, "SPS", self.sup, "SPS", indicatoron=0, column=2)
 
         # name of the spin.
-        self.spin_name_entry = utils.tklib.label_entry(self.lf, "Nom", self.spin_name, 1, 20)
+        self.spin_name_entry = tklib.label_entry(self.lf, "Nom", self.spin_name, 1, 20)
 
         # motors used.
         Label(self.lf, text="Moteur : ", width=10)\
@@ -164,14 +166,14 @@ class Add_slide(object):
         motor_rg = Frame(self.lf)
         motor_rg.grid(row=2, column=2, padx=10, pady=5, columnspan=3)
 
-        self.spin_motor1_button = utils.tklib.radiobutton(motor_rg, "P", self.spin_motor, \
+        self.spin_motor1_button = tklib.radiobutton(motor_rg, "P", self.spin_motor, \
                                                           "P", indicatoron=0, column=1, width=5)
-        self.spin_motor2_button = utils.tklib.radiobutton(motor_rg, "Q", self.spin_motor, \
+        self.spin_motor2_button = tklib.radiobutton(motor_rg, "Q", self.spin_motor, \
                                                           "Q", indicatoron=0, column=2, width=5)
 
         # if the machine is a MCS15-G, the spinner motor
         # have a different name.
-        if self.machine is utils.machlib.MCS15G.get("name"):
+        if self.machine is controller.machlib.MCS15G.get("name"):
             self.spin_motor1_button.config(text="Y", value="Y")
             self.spin_motor2_button.config(text="X", value="X")
         else:
@@ -185,7 +187,7 @@ class Add_slide(object):
                                  command=None)
         self.scale_s.grid(row=3, column=2, padx=10, pady=5, columnspan=3)
 
-        self.spin_note_entry = utils.tklib.label_entry(self.lf, "note", self.spin_note, 10, 20)
+        self.spin_note_entry = tklib.label_entry(self.lf, "note", self.spin_note, 10, 20)
 
 
     def motor_check(self):
