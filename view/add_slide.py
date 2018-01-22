@@ -15,7 +15,7 @@ from tkinter import *
 #=======================#
 import controller.machlib
 import controller.sprlib
-import controller.form_check
+import controller.forms_controller
 #=======================#
 from view import tklib
 #===============================================================================

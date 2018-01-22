@@ -21,7 +21,7 @@ from tkinter.ttk import *
 #==========================#
 import controller.machlib
 import controller.sprlib
-import controller.form_check
+import controller.forms_controller
 #==========================#
 import view.add_slide
 import view.new_regulation

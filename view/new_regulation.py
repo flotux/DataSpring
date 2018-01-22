@@ -31,7 +31,7 @@ from tkinter import *
 #=======================#
 import controller.machlib
 import controller.sprlib
-from controller.form_check import empty, format_float, valide, highlight
+from controller.forms_controller import empty, format_float, valide, highlight
 #=======================#
 from view import tklib
 #===============================================================================
