@@ -5,7 +5,7 @@
 # Contact : flvitalli@gmail.com
 
 """
-    form_check
+    forms_controller
 
         A function library for the GUI.
         """
@@ -35,7 +35,7 @@ def format_float(var):
 
 
 def can_be_float(var):
-    """ Check if the var can be float.
+    """ Check if the var can be converted in float type.
 
         var -str- the variable to check
         Return:
@@ -43,7 +43,7 @@ def can_be_float(var):
             False - a cannot
         """
 
-    if type(format_float(var)) is type(float()):
+    if isinstance(format_float(var), float):
         return True
     else:
         return False
@@ -81,19 +81,15 @@ def valide(var):
 
 
 def highlight(item, color="Yellow"):
-    """ Highlight the item received. """
+    """ Highlight the item received.
+
+        item -tk object- the item
+        color -str- the color used for highlighting
+        """
 
     item.config(background=color)
 
 
 if __name__ == '__main__':
-    str_var = "12,6"
-    var = format_float(str_var)
-    print(var, type(var))
-    print(format_float(str_var))
-    print (empty(str_var), 'not empty')
-    print (can_be_float(str_var))
-    if valide(str_var):
-        print('valide')
-    else:
-        print('non valide')
+    var = 12.0
+    print(can_be_float(var))
