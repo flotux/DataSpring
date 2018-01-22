@@ -43,10 +43,8 @@ def can_be_float(var):
             False - a cannot
         """
 
-    if isinstance(format_float(var), float):
-        return True
-    else:
-        return False
+    is_float = isinstance(format_float(var), float)
+    return is_float
 
 
 def empty(var):
@@ -58,10 +56,8 @@ def empty(var):
             False - it is not empty
         """
 
-    if len(var):
-        return False
-    else:
-        return True
+    is_empty = not len(var)
+    return is_empty
 
 
 def valide(var):
