@@ -167,7 +167,7 @@ class NewRegulation(object):
         Label(self.fs, text="spires").grid(row=3, column=3)
 
         # diameter toleration entry, for self.tol.
-        self.diam_tol = tklib.label_entry(self.fs, TOLERATION, self.tol, 4)
+        self.tol_entry = tklib.label_entry(self.fs, TOLERATION, self.tol, 4)
         Label(self.fs, text="mm").grid(row=4, column=3)
 
     def machine_selected(self, *evt):
@@ -207,12 +207,22 @@ class NewRegulation(object):
 
     def validation(self):
         """ validate each values.
-
             """
 
         if not valide(self.diam.get()):
             highlight(self.diam_entry)
+        else:
+            highlight(self.diam_entry, "White")
 
+        if not valide(self.nb.get()):
+            highlight(self.nb_entry)
+        else:
+            highlight(self.nb_entry, "White")
+
+        if not valide(self.tol.get()):
+            highlight(self.tol_entry)
+        else:
+            highlight(self.tol_entry, "White")
 
     def next(self):
         """ TODO """
